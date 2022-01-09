@@ -1,7 +1,13 @@
 ---
 - hosts: server 
   become: yes
+  gather_facts: no
   vars_files:
     - vars/secret.yml
+  
   roles:  
    - mysql
+  
+  handlers:
+    - import_task:
+      - handlers/mysql.yml

@@ -2,8 +2,6 @@
 - hosts: server 
   become: yes
   gather_facts: no
-  vars_files:
-    - group_vars/vars
   
   tasks:
    - name: Setup Proxy
@@ -15,6 +13,3 @@
   roles:  
    - mysql
   
-  handlers:
-    - import_task:
-      - handlers/mysql.yml

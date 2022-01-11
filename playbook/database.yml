@@ -3,10 +3,17 @@
   become: yes
   gather_facts: no
   vars_files:
-    - vars/secret.yml
+    - group_vars/vars
   
+  tasks:
+   - name: Setup Proxy
+     apt: name=cobbler state=installed
+     environment:
+       http_proxy: http://proxy.example.com:80
+       https_proxy: http://proxy.example.com:443
+
   roles:  
-   - mysql
+   - dbserver
   
   handlers:
     - import_task:

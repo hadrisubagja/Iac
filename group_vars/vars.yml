@@ -1,0 +1,3 @@
+db_user: {{ vault_db_user }}
+db_pass: {{ vault_db_pass }}
+db_name: medium_db

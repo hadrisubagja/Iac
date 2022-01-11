@@ -13,7 +13,7 @@
        https_proxy: http://proxy.example.com:443
 
   roles:  
-   - dbserver
+   - mysql
   
   handlers:
     - import_task:

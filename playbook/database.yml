@@ -11,11 +11,5 @@
   #      https_proxy: http://proxy.example.com:443
 
   roles:  
-   role: mysql
-   value: "{{ item }}"
-   with_items:
-     - mysql-server
-     - mysql-client 
-     - python3-mysqldb
-     - libmysqlclient-dev
+   - mysql
   

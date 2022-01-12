@@ -29,12 +29,6 @@
 #   apt: "deb=tmp/mysql-apt-config_0.8.6-1_all.deb"
 #   become: true
 
-- name: check latest version of mysql 5.7
-  command: bash -c "apt-cache showpkg mysql-server|grep 5.7|head -1|cut -d' ' -f1"
-  register: latestmysql57
-
-- debug: msg="{{ latestmysql57.stdout }}"
-
 # Update repository
 - name: Update repo
   shell: apt update
@@ -65,6 +59,12 @@
 # - name: Install mysql-server 5.7
 #   apt:
 #     name: mysql-server=5.7.33-1ubuntu20.04
+
+- name: check latest version of mysql 5.7
+  command: bash -c "apt-cache showpkg mysql-server|grep 5.7|head -1|cut -d' ' -f1"
+  register: latestmysql57
+
+- debug: msg="{{ latestmysql57.stdout }}"
 
 - name: install mysql 57
   apt:

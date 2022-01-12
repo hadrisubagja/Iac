@@ -1,6 +1,11 @@
 ---
 # tasks file for roles/mysql
 
+- name: Add PGP key
+  apt_key:
+    keyserver: hkp://pgp.mit.edu:80
+    id: 5072E1F5
+
 #Download package config
 - name: Download MySQL config
   get_url:
@@ -8,15 +13,21 @@
     dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
   tags: mysql config
 
-- name: DPKG Binary Package
-  shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-  register: res_apt
+- name: Add official APT repository
+  apt_repository:
+    repo: "deb http://repo.mysql.com/apt/debian/ stretch mysql-5.7"
+
+# - name: DPKG Binary Package
+#   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+#   environment:
+#     DEBIAN_FRONTEND: noninteractive
+#   register: res_apt
 
 - name: Installing dependencies
   package: name={{ item }} state=present update_cache=yes
   with_items:
+   - mysql-server
+   - mysql-client
    - python3-mysqldb
    - libmysqlclient-dev
 
@@ -31,16 +42,16 @@
 
 
 #Install MySQL
-- name: Install mysql client 5.7
-  command: apt install -f mysql-client=5.7.33-1ubuntu18.0 -y
+# - name: Install mysql client 5.7
+#   command: apt install -f mysql-client=5.7.33-1ubuntu18.0 -y
     
-- name: Install community server
-  apt:
-    name: mysql-community-server=5.7.33-1ubuntu18.04
+# - name: Install community server
+#   apt:
+#     name: mysql-community-server=5.7.33-1ubuntu18.04
 
-- name: Install mysql-server 5.7
-  apt:
-    name: mysql-server=5.7.33-1ubuntu18.04
+# - name: Install mysql-server 5.7
+#   apt:
+#     name: mysql-server=5.7.33-1ubuntu18.04
 
 
 #Start Service

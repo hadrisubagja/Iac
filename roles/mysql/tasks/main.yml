@@ -2,12 +2,9 @@
 # tasks file for roles/mysql
 
 - nama: Install package MySQL
-  apt:
-    deb: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
-    state: present
-  # get_url:
-  #   url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
-  #   dest: /tmp
+  get_url:
+    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
 # - name: Installing Mysql and dependencies
 #   package: name={{ item }} state=present update_cache=yes
 #     # name: mysql-server

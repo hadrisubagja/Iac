@@ -2,14 +2,14 @@
 # tasks file for roles/mysql
 - name: Installing Mysql and dependencies
   package:
-    name: {{ item }}
+    name: "{{ item }}"
     state: present
     update_cache: yes
-    with_items:
-     - mysql-server
-     - mysql-client 
-     - python3-mysqldb
-     - libmysqlclient-dev
+    # with_items:
+    #  - mysql-server
+    #  - mysql-client 
+    #  - python3-mysqldb
+    #  - libmysqlclient-dev
 
 - name: start and enable mysql service
   service:

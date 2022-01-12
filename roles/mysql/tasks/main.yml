@@ -1,22 +1,42 @@
 ---
 # tasks file for roles/mysql
 - name: Installing Mysql and dependencies
-  package:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-    # with_items:
-    #  - mysql-server
-    #  - mysql-client 
-    #  - python3-mysqldb
-    #  - libmysqlclient-dev
+  package: name={{ item }} state=present update_cache=yes
+    # name: mysql-server
+    # state: present
+    # update_cache: yes
+  with_items:
+   - mysql-server
+   - mysql-client 
+   - python3-mysqldb
+   - libmysqlclient-dev
 
+# - name: dependencies
+#   package:
+#     name: mysql-client
+#     state: present
+#     update_cache: yes
+
+# - name: dependencies
+#   package:
+#     name: python3-mysqldb
+#     state: present
+#     update_cache: yes
+
+# - name: dependencies
+#   package:
+#     name: libmysqlclient-dev
+#     state: present
+#     update_cache: yes
+
+#Start Service
 - name: start and enable mysql service
   service:
     name: mysql
     state: started
     enabled: yes
-    
+
+#Create User Database    
 # - name: creating mysql user (medium_post)
 #   mysql_user:
 #     name: "{{db_user}}"

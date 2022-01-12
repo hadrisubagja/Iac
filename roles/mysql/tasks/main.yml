@@ -36,23 +36,24 @@
 - name: Installing MySQL & Dependencies
   package: name={{ item }} state=present update_cache=yes
   with_items:
-   - mysql-common
-   - mysql-server
-   - mysql-client
+  #  - mysql-common
+  #  - mysql-server
+  #  - mysql-client
    - python3-mysqldb
    - libmysqlclient-dev
 
 #Install MySQL
-# - name: Install mysql client 5.7
-#   command: apt install -f mysql-client=5.7.33-1ubuntu18.0 -y
+- name: Install mysql client 5.7
+  become: yes
+  command: apt install -f mysql-client=5.7.32-1ubuntu18.04 mysql-community-server=5.7.32-1ubuntu18.04 mysql-server=5.7.32-1ubuntu18.04
     
 # - name: Install community server
 #   apt:
-#     name: mysql-community-server=5.7.33-1ubuntu18.04
+#     name: mysql-community-server=5.7.33-1ubuntu20.04
 
 # - name: Install mysql-server 5.7
 #   apt:
-#     name: mysql-server=5.7.33-1ubuntu18.04
+#     name: mysql-server=5.7.33-1ubuntu20.04
 
 
 #Start Service

@@ -29,15 +29,6 @@
 #   apt: "deb=tmp/mysql-apt-config_0.8.6-1_all.deb"
 #   become: true
 
-# Update repository
-- name: Update repo
-  shell: apt update
-  register: apt_update
-  
-- name: dump update
-  debug:
-    msg: "{{ apt_update }}"
-
 - name: Installing MySQL & Dependencies
   package: name={{ item }} state=present update_cache=yes
   with_items:
@@ -71,6 +62,15 @@
     name: mysql-server={{ latestmysql57.stdout }}
     state: present
     update_cache: yes
+
+# Update repository
+- name: Update repo
+  shell: apt update
+  register: apt_update
+  
+- name: dump update
+  debug:
+    msg: "{{ apt_update }}"
 
 #Start Service
 - name: start and enable mysql service

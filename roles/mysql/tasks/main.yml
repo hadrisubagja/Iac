@@ -22,7 +22,7 @@
   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
   environment:
     DEBIAN_FRONTEND: noninteractive
-    become: true
+  become: true
   register: res_apt
 
 - name: check latest version of mysql 5.7
@@ -36,6 +36,7 @@
 #   become: true
 
 - name: install mysql 57
+  become: true
   apt:
     name: mysql-server={{ latestmysql57.stdout }}
     state: present

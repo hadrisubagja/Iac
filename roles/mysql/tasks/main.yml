@@ -23,13 +23,6 @@
 #     DEBIAN_FRONTEND: noninteractive
 #   register: res_apt
 
-- name: Installing dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - mysql-server
-   - mysql-client
-   - python3-mysqldb
-   - libmysqlclient-dev
 
 # Update repository
 - name: Update repo
@@ -40,6 +33,13 @@
   debug:
     msg: "{{ apt_update }}"
 
+- name: Installing MySQL & Dependencies
+  package: name={{ item }} state=present update_cache=yes
+  with_items:
+   - mysql-server
+   - mysql-client
+   - python3-mysqldb
+   - libmysqlclient-dev
 
 #Install MySQL
 # - name: Install mysql client 5.7

@@ -7,11 +7,11 @@
     id: 5072E1F5
 
 #Download package config
-- name: Download MySQL config
-  get_url:
-    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
-    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
-  tags: mysql config
+# - name: Download MySQL config
+#   get_url:
+#     url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+#     dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
+#   tags: mysql config
 
 - name: Add official APT repository
   apt_repository:

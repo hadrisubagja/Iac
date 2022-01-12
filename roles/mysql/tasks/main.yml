@@ -2,7 +2,7 @@
 # tasks file for roles/mysql
 - name: Installing Mysql and dependencies
   package:
-    name: nginx
+    name: "{{ item }}"
     state: present
     update_cache: yes
     # with_items:
@@ -13,7 +13,7 @@
 
 - name: start and enable mysql service
   service:
-    name: nginx
+    name: mysql
     state: started
     enabled: yes
     

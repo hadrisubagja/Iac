@@ -7,22 +7,32 @@
     id: 5072E1F5
 
 #Download package config
-# - name: Download MySQL config
-#   get_url:
-#     url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
-#     dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
-#   tags: mysql config
+- name: Download MySQL repository
+  get_url:
+    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
+    mode: 0440
+  tags: mysql config
 
-- name: Add official APT repository
-  apt_repository:
-    repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
+# - name: Add official APT repository
+#   apt_repository:
+#     repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
 
-# - name: DPKG Binary Package
+# - name: dpkg binary package
 #   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
 #   environment:
 #     DEBIAN_FRONTEND: noninteractive
 #   register: res_apt
 
+- name: install mysql repo
+  apt: "deb=/tmp/mysql-apt-config_0.8.6-1_all.deb"
+  become: true
+
+- name: check latest version of mysql 5.7
+  command: bash -c "apt-cache showpkg mysql-server|grep 5.7|head -1|cut -d' ' -f1"
+  register: latestmysql57
+
+- debug: msg="{{ latestmysql57.stdout }}"
 
 # Update repository
 - name: Update repo
@@ -43,9 +53,9 @@
    - libmysqlclient-dev
 
 #Install MySQL
-- name: Install mysql client 5.7
-  become: yes
-  command: apt install -f mysql-client=5.7.32-1ubuntu18.04 mysql-community-server=5.7.32-1ubuntu18.04 mysql-server=5.7.32-1ubuntu18.04
+# - name: Install mysql client 5.7
+#   become: yes
+#   command: apt install -f mysql-client=5.7.32-1ubuntu18.04 mysql-community-server=5.7.32-1ubuntu18.04 mysql-server=5.7.32-1ubuntu18.04
     
 # - name: Install community server
 #   apt:
@@ -55,6 +65,11 @@
 #   apt:
 #     name: mysql-server=5.7.33-1ubuntu20.04
 
+- name: install mysql 57
+  apt:
+    name: mysql-server={{ latestmysql57.stdout }}
+    state: present
+    update_cache: yes
 
 #Start Service
 - name: start and enable mysql service

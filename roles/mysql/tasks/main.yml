@@ -14,6 +14,12 @@
     DEBIAN_FRONTEND: noninteractive
   register: res_apt
 
+- name: Installing dependencies
+  package: name={{ item }} state=present update_cache=yes
+  with_items:
+   - python3-mysqldb
+   - libmysqlclient-dev
+
 # Update repository
 - name: Update repo
   shell: apt update
@@ -25,29 +31,16 @@
 
 
 #Install MySQL
-- name: Install mysql client 5.7
-  command: apt install -f mysql-client=5.7 -y
+# - name: Install mysql client 5.7
+#   command: apt install -f mysql-client=5.7 -y
     
-- name: Install community server
-  apt:
-    name: mysql-community-server=5.7
+# - name: Install community server
+#   apt:
+#     name: mysql-community-server=5.7
 
-- name: Install mysql-server 5.7
-  apt:
-    name: mysql-server=5.7
-
-
-
-# - name: Installing Mysql and dependencies
-#   package: name={{ item }} state=present update_cache=yes
-#     # name: mysql-server
-#     # state: present
-#     # update_cache: yes
-#   with_items:
-#    - mysql-server
-#    - mysql-client 
-#    - python3-mysqldb
-#    - libmysqlclient-dev
+# - name: Install mysql-server 5.7
+#   apt:
+#     name: mysql-server=5.7
 
 
 #Start Service

@@ -26,15 +26,15 @@
 
 #Install MySQL
 - name: Install mysql client 5.7
-  command: apt install -f mysql-client=5.7*
+  command: apt install -f mysql-client=5.7
     
 - name: Install community server
   apt:
-    name: mysql-community-server=5.7*
+    name: mysql-community-server=5.7
 
 - name: Install mysql-server 5.7
   apt:
-    name: mysql-server=5.7*
+    name: mysql-server=5.7
 
 
 

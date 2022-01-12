@@ -15,7 +15,7 @@
 
 - name: Add official APT repository
   apt_repository:
-    repo: "deb http://repo.mysql.com/apt/debian/ stretch mysql-5.7"
+    repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
 
 # - name: DPKG Binary Package
 #   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
@@ -36,6 +36,7 @@
 - name: Installing MySQL & Dependencies
   package: name={{ item }} state=present update_cache=yes
   with_items:
+   - mysql-common
    - mysql-server
    - mysql-client
    - python3-mysqldb

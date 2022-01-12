@@ -1,8 +1,28 @@
 ---
 # tasks file for roles/mysql
 
-- nama: Install package MySQL
-  get_url: url=https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb /tmp/mysql-apt-config_0.8.12-1_all.deb
+- nama: Download MySQL config
+  get_url:
+    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
+  tags: mysql config
+
+- name: DPKG Binary Package
+  shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  register: res_apt
+
+- name: Update repo
+  shell: apt update
+  register: apt_update
+  
+- name: dump update
+  debug:
+    msg: "{{ apt_update }}"
+
+
+
 # - name: Installing Mysql and dependencies
 #   package: name={{ item }} state=present update_cache=yes
 #     # name: mysql-server

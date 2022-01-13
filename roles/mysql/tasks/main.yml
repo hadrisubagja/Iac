@@ -1,25 +1,40 @@
 ---
 # tasks file for roles/mysql
 
+- name: Installing MySQL & Dependencies
+  package: name={{ item }} state=present update_cache=yes
+  with_items:
+   - python3
+   - python3-setuptools
+   - python3-dev
+   - build-essential
+   - python3-pip
+   - python3-pymysql
+   - python3-mysqldb
+   - libmysqlclient-dev
+
 - name: Add PGP key
   apt_key:
     keyserver: hkp://pgp.mit.edu:80
     id: 5072E1F5
+  state: present
+
 
 #Download package config
-- name: Download MySQL repository
-  get_url:
-    url: https://dev.mysql.com/get/mysql-apt-config_0.8.6-1_all.deb
-    dest: /tmp/mysql-apt-config_0.8.6-1_all.deb
-    mode: 0440
-  tags: mysql config
+# - name: Download MySQL repository
+#   get_url:
+#     url: https://dev.mysql.com/get/mysql-apt-config_0.8.6-1_all.deb
+#     dest: /tmp/mysql-apt-config_0.8.6-1_all.deb
+#     mode: 0440
+#   tags: mysql config
 
-# - name: Add official APT repository
-#   apt_repository:
-#     repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
+- name: Add official MySQL 5.7 ubuntu bionic repository
+  apt_repository:
+    repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
+  state: present
 
 # - name: dpkg binary package
-#   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+#   command: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
 #   environment:
 #     DEBIAN_FRONTEND: noninteractive
 #   become: true
@@ -31,25 +46,23 @@
 
 # - debug: msg="{{ latestmysql57.stdout }}"
 
-- name: install mysql repo
-  apt: "deb=tmp/mysql-apt-config_0.8.6-1_all.deb"
-  become: true
+# - name: install mysql repo
+#   apt: "deb=tmp/mysql-apt-config_0.8.6-1_all.deb"
+#   become: true
 
-- name: install mysql 57
-  become: true
-  apt:
-    name: mysql-server={{ latestmysql57.stdout }}
-    state: present
-    update_cache: yes
+# - name: install mysql 57
+#   become: true
+#   apt:
+#     name: mysql-server={{ latestmysql57.stdout }}
+#     state: present
+#     update_cache: yes
 
 - name: Installing MySQL & Dependencies
   package: name={{ item }} state=present update_cache=yes
   with_items:
    - mysql-common
-  #  - mysql-server
-  #  - mysql-client
-   - python3-mysqldb
-   - libmysqlclient-dev
+   - mysql-server
+   - mysql-client
 
 #Install MySQL
 # - name: Install mysql client 5.7
@@ -58,21 +71,21 @@
     
 # - name: Install community server
 #   apt:
-#     name: mysql-community-server=5.7.33-1ubuntu20.04
+#     name: mysql-community-server=5.7.33-1ubuntu18.04
 
 # - name: Install mysql-server 5.7
 #   apt:
-#     name: mysql-server=5.7.33-1ubuntu20.04
+#     name: mysql-server=5.7.33-1ubuntu18.04
 
 
 # Update repository
-- name: Update repo
-  shell: apt update
-  register: apt_update
+# - name: Update repo
+#   shell: apt update
+#   register: apt_update
   
-- name: dump update
-  debug:
-    msg: "{{ apt_update }}"
+# - name: dump update
+#   debug:
+#     msg: "{{ apt_update }}"
 
 #Start Service
 - name: start and enable mysql service

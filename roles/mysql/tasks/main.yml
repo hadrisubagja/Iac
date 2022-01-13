@@ -31,7 +31,7 @@
 - name: Add official MySQL 5.7 ubuntu bionic repository
   apt_repository:
     repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
-  state: present
+  # state: present
 
 # - name: dpkg binary package
 #   command: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb

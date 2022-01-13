@@ -58,7 +58,7 @@
 #     update_cache: yes
 
 - name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present update_cache=yes
+  package: name={{ item }} state=present
   with_items:
    - mysql-common
    - mysql-server

@@ -54,7 +54,7 @@
   debug:
     msg: "{{ apt_update }}"
 - name: Install mysql client 5.7
-  become: root
+  become: true
   command: apt install -f mysql-client=5.7.33-1ubuntu18.04 -y
     
 - name: Install community server

@@ -1,91 +1,74 @@
 ---
 # tasks file for roles/mysql
 
-- name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - python3
-   - python3-setuptools
-   - python3-dev
-   - build-essential
-   - python3-pip
-   - python3-pymysql
-   - python3-mysqldb
-   - libmysqlclient-dev
+# - name: Installing MySQL & Dependencies
+#   package: name={{ item }} state=present update_cache=yes
+#   with_items:
+#    - python3
+#    - python3-setuptools
+#    - python3-dev
+#    - build-essential
+#    - python3-pip
+#    - python3-pymysql
+#    - python3-mysqldb
+#    - libmysqlclient-dev
 
-- name: Add PGP key
-  apt_key:
-    keyserver: hkp://pgp.mit.edu:80
-    id: 5072E1F5
+# - name: Add PGP key
+#   apt_key:
+#     keyserver: hkp://pgp.mit.edu:80
+#     id: 5072E1F5
   # state: present
 
-
-#Download package config
-# - name: Download MySQL repository
-#   get_url:
-#     url: https://dev.mysql.com/get/mysql-apt-config_0.8.6-1_all.deb
-#     dest: /tmp/mysql-apt-config_0.8.6-1_all.deb
-#     mode: 0440
-#   tags: mysql config
-
-- name: Add official MySQL 5.7 ubuntu bionic repository
-  apt_repository:
-    repo: "deb http://repo.mysql.com/apt/ubuntu bionic mysql-5.7"
-  # state: present
-
-# - name: dpkg binary package
-#   command: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
-#   become: true
-#   register: res_apt
-
-# - name: check latest version of mysql 5.7
-#   command: bash -c "apt-cache showpkg mysql-server|grep 5.7|head -1|cut -d' ' -f1"
-#   register: latestmysql57
-
-# - debug: msg="{{ latestmysql57.stdout }}"
-
-# - name: install mysql repo
-#   apt: "deb=tmp/mysql-apt-config_0.8.6-1_all.deb"
-#   become: true
-
-# - name: install mysql 57
-#   become: true
-#   apt:
-#     name: mysql-server={{ latestmysql57.stdout }}
-#     state: present
-#     update_cache: yes
-
-- name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present
-  with_items:
-   - mysql-common
-   - mysql-server
-   - mysql-client
-
-#Install MySQL
-# - name: Install mysql client 5.7
-#   become: yes
-#   command: apt install -f mysql-client=5.7.32-1ubuntu18.04 mysql-community-server=5.7.32-1ubuntu18.04 mysql-server=5.7.32-1ubuntu18.04
-    
-# - name: Install community server
-#   apt:
-#     name: mysql-community-server=5.7.33-1ubuntu18.04
-
-# - name: Install mysql-server 5.7
-#   apt:
-#     name: mysql-server=5.7.33-1ubuntu18.04
-
-
-# Update repository
-# - name: Update repo
-#   shell: apt update
-#   register: apt_update
+- name: Download MySQL config
+  get_url:
+    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
+  tags: mysql config
   
-# - name: dump update
-#   debug:
-#     msg: "{{ apt_update }}"
+- name: select version os
+  shell: echo mysql-apt-config mysql-apt-config/repo-codename select bionic | sudo debconf-set-selections;
+- name: select version mysql
+  shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-5.7 | sudo debconf-set-selections;
+- name: select tools
+  shell: echo mysql-apt-config mysql-apt-config/select-tools select Enabled | sudo debconf-set-selections;
+- name: select preview
+  shell: echo mysql-apt-config mysql-apt-config/select-preview select Disabled | sudo debconf-set-selections;
+
+- name: select product ok
+  shell: echo mysql-apt-config mysql-apt-config/select-product select Ok | sudo debconf-set-selections;
+
+- name: DPKG Binary Package
+  shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  register: res_apt
+   
+- name: dump
+  debug:
+    msg: "{{ res_apt }}"
+   # update repo
+- name: Update repo
+  shell: apt update
+  register: apt_update
+- name: dump update
+  debug:
+    msg: "{{ apt_update }}"
+- name: Install mysql client 5.7
+  become: root
+  command: apt install -f mysql-client=5.7.33-1ubuntu18.04 -y
+    
+- name: Install community server
+  apt:
+    name: mysql-community-server=5.7.33-1ubuntu18.04
+- name: Install mysql-server 5.7
+  apt:
+    name: mysql-server=5.7.33-1ubuntu18.04
+
+- name: Mysql Result
+  debug:
+    msg: No password for root, just type "mysql -u root". You must set the password manually!
+
+
 
 #Start Service
 - name: start and enable mysql service
@@ -93,6 +76,10 @@
     name: mysql
     state: started
     enabled: yes
+
+
+
+
 
 #Create User Database    
 # - name: creating mysql user (medium_post)

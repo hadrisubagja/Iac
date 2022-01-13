@@ -17,7 +17,7 @@
   apt_key:
     keyserver: hkp://pgp.mit.edu:80
     id: 5072E1F5
-  state: present
+  # state: present
 
 
 #Download package config

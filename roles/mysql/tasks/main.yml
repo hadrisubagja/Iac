@@ -1,17 +1,17 @@
 ---
 # tasks file for roles/mysql
 
-- name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - python3
-   - python3-setuptools
-   - python3-dev
-   - build-essential
-   - python3-pip
-   - python3-pymysql
-   - python3-mysqldb
-   - libmysqlclient-dev
+# - name: Installing MySQL & Dependencies
+#   package: name={{ item }} state=present update_cache=yes
+#   with_items:
+#    - python3
+#    - python3-setuptools
+#    - python3-dev
+#    - build-essential
+#    - python3-pip
+#    - python3-pymysql
+#    - python3-mysqldb
+#    - libmysqlclient-dev
 
 - name: Add PGP key
   apt_key:
@@ -21,30 +21,15 @@
 
 - name: add mysql repo
   get_url:
-    url: https://dev.mysql.com/get/mysql-apt-config_0.8.6-1_all.deb
+    url: https://cdn.mysql.com/archives/mysql-5.7/mysql-server_5.7.35-1ubuntu18.04_i386.deb-bundle.tar
     dest: /home/hadrisubagja
-    mode: 0440
      
-- name: install mysql repo
-  apt: "deb=/home/hadrisubagja/mysql-apt-config_0.8.6-1_all.deb"
-  become: true
+- name: Extract the archive file on the remote node
+  unarchive:
+   src: /home/hadrisubagja/installers/phayes-geoPHP-1.2-20-g6855624.tar.gz
+   dest: /home/hadrisubagja/installers/phayes-geoPHP-1.2-20-g6855624
+  remote_src: yes
  
-- name: install python-mysqldb
-  apt:
-    name: python-mysqldb
-    state: present
-    update_cache: yes
-       
-- name: check latest version of mysql 5.7
-  command: bash -c "apt-cache showpkg mysql-server|grep 5.7|head -1|cut -d' ' -f1"
-  register: latestmysql57
-- debug: msg="{{ latestmysql57.stdout }}"
-   
-- name: install mysql 57
-  apt:
-    name: mysql-server={{ latestmysql57.stdout }}
-    state: present
-    update_cache: yes
 
 #Start Service
 - name: start and enable mysql service

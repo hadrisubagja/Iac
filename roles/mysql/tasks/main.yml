@@ -28,7 +28,7 @@
   unarchive:
    src: /home/hadrisubagja/installers/phayes-geoPHP-1.2-20-g6855624.tar.gz
    dest: /home/hadrisubagja/installers/phayes-geoPHP-1.2-20-g6855624
-  remote_src: yes
+   remote_src: yes
  
 
 #Start Service

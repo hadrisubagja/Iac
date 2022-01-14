@@ -26,8 +26,8 @@
      
 - name: Extract the archive file on the remote node
   unarchive:
-   src: /h/installers/phayes-geoPHP-1.2-20-g6855624.tar.gz
-   dest: /etc/apt/sources.list.d/installers/phayes-geoPHP-1.2-20-g6855624
+   src: /home/hadrisubagja/mysql-server_5.7.35-1ubuntu18.04_i386.deb-bundle.tar
+   dest: /etc/apt/sources.list.d/mysql-server_5.7.35-1ubuntu18.04_i386.deb-bundle
    state: present
    remote_src: yes
  

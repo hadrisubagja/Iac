@@ -22,11 +22,11 @@
 - name: add mysql repo
   get_url:
     url: https://dev.mysql.com/get/mysql-apt-config_0.8.6-1_all.deb
-    dest: /tmp/
+    dest: /home/hadrisubagja
     mode: 0440
      
 - name: install mysql repo
-  apt: "deb=~/mysql-apt-config_0.8.6-1_all.deb"
+  apt: "deb=/home/hadrisubagja/mysql-apt-config_0.8.6-1_all.deb"
   become: true
  
 - name: install python-mysqldb

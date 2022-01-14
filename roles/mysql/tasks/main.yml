@@ -26,7 +26,7 @@
     mode: 0440
      
 - name: install mysql repo
-  command: dpkg -i /tmp/mysql-apt-config_0.8.6-1_all.deb"
+  apt: "deb=~/mysql-apt-config_0.8.6-1_all.deb"
   become: true
  
 - name: install python-mysqldb

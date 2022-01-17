@@ -6,9 +6,6 @@
 #   with_items:
 #    - python3
 #    - python3-setuptools
-#    - python3-dev
-#    - build-essential
-#    - python3-pip
 #    - python3-pymysql
 #    - python3-mysqldb
 #    - libmysqlclient-dev
@@ -19,17 +16,13 @@
     id: 5072E1F5
   # state: present
 
-- name: add mysql repo
-  get_url:
-    url: https://cdn.mysql.com/archives/mysql-5.7/mysql-server_5.7.35-1ubuntu18.04_i386.deb-bundle.tar
-    dest: /home/hadrisubagja
-     
-- name: Extract the archive file on the remote node
-  unarchive:
-   src: /home/hadrisubagja/mysql-server_5.7.35-1ubuntu18.04_i386.deb-bundle.tar
-   dest: /tmp/mysql-server_5.7.35-1ubuntu18.04_i386.deb-bundle
-   state: present
-   remote_src: yes
+- name: Installing MySQL & Dependencies
+  package: name={{ item }} state=present update_cache=yes
+  with_items:
+   - mysql-common
+   - mysql-server5.7
+   - mysql-client5.7
+   - mysql_secure_installation
  
 
 #Start Service

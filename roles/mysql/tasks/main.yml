@@ -22,8 +22,8 @@
 #   debug:
 #     msg: "{{ apt_update }}"
 
-- name: install data note binary
-  shell: dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
+# - name: install data note binary
+#   shell: dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
 
 
 # - name: Installing MySQL & Dependencies

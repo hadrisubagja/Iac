@@ -8,6 +8,7 @@
     dest: /home/hadrisubagja/mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
 
 - name: Update Package
+  become: yes
   apt: update_cache=yes
 
 - name: install data note binary

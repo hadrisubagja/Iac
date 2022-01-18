@@ -44,9 +44,9 @@
   package: name={{ item }} state=present update_cache=yes
   with_items:
    - mysql-common
-   - mysql-community-server-5.7
-   - mysql-server-5.7
-   - mysql-client-5.7
+   - mysql-community-server
+   - mysql-server
+   - mysql-client
 
 #Start Service
 - name: start and enable mysql service

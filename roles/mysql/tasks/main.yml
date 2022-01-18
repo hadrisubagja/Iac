@@ -31,6 +31,8 @@
 
 - name: DPKG Binary Package
   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: Update Repository
   shell: apt update

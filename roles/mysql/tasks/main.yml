@@ -1,9 +1,8 @@
 ---
 # tasks file for roles/mysql
 - name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - mysql-common
+  package: name=mysql-common state=present update_cache=yes
+  
 
 #Download package config
 - name: Download MySQL Cluster Repository

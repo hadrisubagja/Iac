@@ -11,6 +11,6 @@
   #      http_proxy: http://proxy.example.com:80
   #      https_proxy: http://proxy.example.com:443
 
-  roles:  
+  roles:
    - mysql
   

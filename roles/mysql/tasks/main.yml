@@ -1,36 +1,46 @@
 ---
 # tasks file for roles/mysql
 
+#Download package config
+- name: Download MySQL repository
+  get_url:
+    url: https://downloads.mysql.com/archives/get/p/14/file/mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
+    dest: /home/hadrisubagja/mysql-apt-config_0.8.6-1_all.deb
+
+
+
+
+
 # - name: Installing MySQL & Dependencies
 #   package: name={{ item }} state=present update_cache=yes
 #   with_items:
-#    - python3
-#    - python3-setuptools
-#    - python3-pymysql
-#    - python3-mysqldb
+#    - python-pip
+#    - python-virtualenv
+#    - python-pymysql
+#    - python-mysqldb
 #    - libmysqlclient-dev
 
-- name: Add PGP key
-  apt_key:
-    keyserver: hkp://pgp.mit.edu:80
-    id: 5072E1F5
-  # state: present
+# - name: Add PGP key
+#   apt_key:
+#     keyserver: hkp://pgp.mit.edu:80
+#     id: 5072E1F5
+#   # state: present
 
-- name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - mysql-common
-   - mysql-server5.7
-   - mysql-client5.7
-   - mysql_secure_installation
+# - name: Installing MySQL & Dependencies
+#   package: name={{ item }} state=present update_cache=yes
+#   with_items:
+#    - mysql-common
+#    - mysql-server
+#    - mysql-client
+#    - mysql_secure_installation
  
 
-#Start Service
-- name: start and enable mysql service
-  service:
-    name: mysql
-    state: started
-    enabled: yes
+# #Start Service
+# - name: start and enable mysql service
+#   service:
+#     name: mysql
+#     state: started
+#     enabled: yes
 
 #Create User Database    
 # - name: creating mysql user (medium_post)

@@ -5,7 +5,7 @@
 - name: Download MySQL repository
   get_url:
     url: https://downloads.mysql.com/archives/get/p/14/file/mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
-    dest: /home/hadrisubagja/mysql-apt-config_0.8.6-1_all.deb
+    dest: /home/hadrisubagja/mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
 
 
 

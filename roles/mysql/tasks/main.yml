@@ -1,6 +1,12 @@
 ---
 # tasks file for roles/mysql
 
+- name: Install Dependency
+  ackage: name={{ item }} state=present update_cache=yes
+  with_items:
+   - systemd
+   - man-db
+
 #Download package config
 - name: Download MySQL Cluster Repository
   get_url:

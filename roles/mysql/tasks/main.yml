@@ -4,20 +4,20 @@
 #Download package config
 - name: Download MySQL Cluster Repository
   get_url:
-    url: https://downloads.mysql.com/archives/get/p/14/file/mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
+    url: https://downloads.mysql.com/archives/get/p/14/file/mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
     dest: /home/hadrisubagja/mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
 
 # Update repository
 - name: Update repo
   shell: apt update
-  register: apt_update
+  # register: apt_update
   
-- name: dump update
-  debug:
-    msg: "{{ apt_update }}"
+# - name: dump update
+#   debug:
+#     msg: "{{ apt_update }}"
 
 - name: install data note binary
-  shell: dpkg -i mysql-cluster-community-management-server_7.6.19-1ubuntu18.04_amd64.deb
+  shell: dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
 
 
 # - name: Installing MySQL & Dependencies

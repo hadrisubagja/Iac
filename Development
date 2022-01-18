@@ -1,5 +1,8 @@
-[server]
-Server1 ansible_ssh_host=34.101.100.223
+[master]
+db1 ansible_ssh_host=34.101.100.223
 
-[server:vars]
+[master:vars]
 ansible_ssh_private_key_file= ~/.ssh/ansible.pem
+
+[slave]
+db2 ansible_connection=local

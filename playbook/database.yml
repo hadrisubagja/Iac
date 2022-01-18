@@ -1,8 +1,10 @@
 ---
-- hosts: server 
+- hosts: master 
   become: yes
   become_method: sudo
   gather_facts: no
+  vars:
+
   
   # tasks:
   #  - name: Setup Proxy

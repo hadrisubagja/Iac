@@ -1,27 +1,30 @@
 ---
 # tasks file for roles/mysql
+
+- name: Download MySQL config
+  get_url:
+    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
+  tags: mysql config
   
+- name: select version os
+  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/repo-codename select bionic'
+- name: select version mysql
+  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/repo-distro select ubuntu'
+- name: select tools
+  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/select-product select Ok'
+- name: select preview
+  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/select-server select mysql-5.7'
 
-#Download package config
-- name: Install Package
-  package: name=percona-xtradb-cluster-57 state=present update_cache=yes
-  notify: MysSQL Stop
+- name: Add Key Server
+  shell: apt-key adv --keyserver pgp.mit.edu --recv-keys 467B942D3A79BD29
 
-
-# Update repository
-- name: Update repo
+- name:
   shell: apt update
-  # register: apt_update
-  
 
-- name: Installing Dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - python-pip
-   - python-virtualenv
-   - python-pymysql
-   - python-mysqldb
-   - libmysqlclient-dev
+- name:
+  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+
 
 # - name: Add PGP key
 #   apt_key:

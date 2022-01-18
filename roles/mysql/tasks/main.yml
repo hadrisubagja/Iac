@@ -16,15 +16,15 @@
 - name: Select Preview
   shell: echo mysql-apt-config mysql-apt-config/select-preview select Disabled | sudo debconf-set-selections;
 
+# - name: Add Key Server
+#   shell: apt-key adv --keyserver pgp.mit.edu --recv-keys 467B942D3A79BD29
+#   ignore_errors: yes
+
 - name: Add PGP key
   apt_key:
     keyserver: hkp://pgp.mit.edu:80
     id: 467B942D3A79BD29
   ignore_errors: yes
-
-# - name: Add Key Server
-#   shell: apt-key adv --keyserver pgp.mit.edu --recv-keys 467B942D3A79BD29
-#   ignore_errors: yes
 
 - name: DPKG Binary Package
   shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
@@ -35,7 +35,7 @@
   shell: apt update
 
 - name: Install MySQL
-  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+  shell: apt install -y -f mysql-server=5.7*
 
 #Start Service
 - name: start and enable mysql service

@@ -37,8 +37,16 @@
 - name: Update Repository
   shell: apt update
 
-- name: Install MySQL
-  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+# - name: Install MySQL
+#   shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+
+- name: Installing MySQL & Dependencies
+  package: name={{ item }} state=present update_cache=yes
+  with_items:
+   - mysql-common
+   - mysql-community-server-5.7
+   - mysql-server-5.7
+   - mysql-client-5.7
 
 #Start Service
 - name: start and enable mysql service
@@ -47,41 +55,4 @@
     state: started
     enabled: yes
 
-# - name: Add PGP key
-#   apt_key:
-#     keyserver: hkp://pgp.mit.edu:80
-#     id: 5072E1F5
-#   # state: present
 
-# - name: Installing MySQL & Dependencies
-#   package: name={{ item }} state=present update_cache=yes
-#   with_items:
-#    - mysql-common
-#    - mysql-server
-#    - mysql-client
-#    - mysql_secure_installation
- 
-
-
-#Create User Database    
-# - name: creating mysql user (medium_post)
-#   mysql_user:
-#     name: "{{db_user}}"
-#     password: "{{db_pass}}"
-#     priv: '*.*:ALL'
-#     host: '%'
-#     state: present
-
-# - name: creating medium_db
-#   mysql_db:
-#     name: "{{db_name}}"
-#     state: present
-
-# - name: Enable remote login to mysql
-#   lineinfile:
-#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-#     regexp: '^bind-address'
-#     line: 'bind-address = 0.0.0.0'
-#     backup: yes
-#   notify:
-#    - Restart mysql

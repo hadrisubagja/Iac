@@ -37,16 +37,8 @@
 - name: Update Repository
   shell: apt update
 
-# - name: Install MySQL
-#   shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
-
-- name: Installing MySQL & Dependencies
-  package: name={{ item }} state=present update_cache=yes
-  with_items:
-   - mysql-common
-   - mysql-community-server
-   - mysql-server
-   - mysql-client
+- name: Install MySQL
+  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
 
 #Start Service
 - name: start and enable mysql service

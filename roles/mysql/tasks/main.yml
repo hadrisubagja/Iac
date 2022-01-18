@@ -8,13 +8,13 @@
   tags: mysql config
   
 - name: select version os
-  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/repo-codename select bionic'
+  shell: echo mysql-apt-config mysql-apt-config/repo-codename select bionic | sudo debconf-set-selections;
 - name: select version mysql
-  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/repo-distro select ubuntu'
+  shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-5.7 | sudo debconf-set-selections;
 - name: select tools
-  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/select-product select Ok'
+  shell: echo mysql-apt-config mysql-apt-config/select-tools select Enabled | sudo debconf-set-selections;
 - name: select preview
-  shell: debconf-set-selections <<< 'mysql-apt-config mysql-apt-config/select-server select mysql-5.7'
+  shell: echo mysql-apt-config mysql-apt-config/select-preview select Disabled | sudo debconf-set-selections;
 
 - name: Add Key Server
   shell: apt-key adv --keyserver pgp.mit.edu --recv-keys 467B942D3A79BD29

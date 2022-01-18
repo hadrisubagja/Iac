@@ -1,7 +1,7 @@
 ---
 # tasks file for roles/mysql
-- name: Installing MySQL & Dependencies
-  package: name=mysql-common state=present update_cache=yes
+# - name: Installing MySQL & Dependencies
+#   package: name=mysql-common state=present update_cache=yes
   
 
 #Download package config
@@ -15,9 +15,8 @@
   shell: apt update
   # register: apt_update
   
-# - name: dump update
-#   debug:
-#     msg: "{{ apt_update }}"
+- name: install libclass-methodmaker-perl
+  shell: apt install libclass-methodmaker-perl
 
 - name: install data note binary
   shell: dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb

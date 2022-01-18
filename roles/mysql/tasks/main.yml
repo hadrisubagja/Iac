@@ -35,7 +35,7 @@
   shell: apt update
 
 - name: Install MySQL
-  shell: apt install -y -f mysql-server=5.7*
+  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
 
 #Start Service
 - name: start and enable mysql service

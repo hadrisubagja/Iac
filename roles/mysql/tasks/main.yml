@@ -1,35 +1,27 @@
 ---
 # tasks file for roles/mysql
-# - name: Installing MySQL & Dependencies
-#   package: name=mysql-common state=present update_cache=yes
   
 
 #Download package config
-- name: Download MySQL Cluster Repository
-  get_url:
-    url: https://downloads.mysql.com/archives/get/p/14/file/mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
-    dest: /home/hadrisubagja/mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
+- name: Install Package
+  package: name=percona-xtradb-cluster-57 state=present update_cache=yes
+  notify: MysSQL Stop
+
 
 # Update repository
 - name: Update repo
   shell: apt update
   # register: apt_update
   
-- name: install libclass-methodmaker-perl
-  shell: apt install libclass-methodmaker-perl
 
-- name: install data note binary
-  shell: dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
-
-
-# - name: Installing MySQL & Dependencies
-#   package: name={{ item }} state=present update_cache=yes
-#   with_items:
-#    - python-pip
-#    - python-virtualenv
-#    - python-pymysql
-#    - python-mysqldb
-#    - libmysqlclient-dev
+- name: Installing Dependencies
+  package: name={{ item }} state=present update_cache=yes
+  with_items:
+   - python-pip
+   - python-virtualenv
+   - python-pymysql
+   - python-mysqldb
+   - libmysqlclient-dev
 
 # - name: Add PGP key
 #   apt_key:

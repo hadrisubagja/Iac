@@ -4,3 +4,8 @@
   service:
     name: mysql
     state: restarted
+
+- name: Restart mysql
+  service:
+    name: mysql
+    state: Stopped

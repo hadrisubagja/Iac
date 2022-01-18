@@ -19,12 +19,23 @@
 - name: Add Key Server
   shell: apt-key adv --keyserver pgp.mit.edu --recv-keys 467B942D3A79BD29
 
-- name:
+- name: DPKG Binary Package
+  shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Update Repository
   shell: apt update
 
-- name:
+- name: Install MySQL
   shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
 
+#Start Service
+- name: start and enable mysql service
+  service:
+    name: mysql
+    state: started
+    enabled: yes
 
 # - name: Add PGP key
 #   apt_key:
@@ -41,12 +52,6 @@
 #    - mysql_secure_installation
  
 
-# #Start Service
-# - name: start and enable mysql service
-#   service:
-#     name: mysql
-#     state: started
-#     enabled: yes
 
 #Create User Database    
 # - name: creating mysql user (medium_post)

@@ -27,10 +27,10 @@
   # http://ansible.cc/docs/modules.html#mysql-user
 - name: update mysql root password for all root accounts
   mysql_user: 
-    name: root 
+    name: "{{ mysql_root_username }}"
     host: "{{ item }}" 
     password: "{{ mysql_root_password }}"
-    login_user: root
+    login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_root_password }}"
     check_implicit_admin: yes
     priv: "*.*:ALL,GRANT"
@@ -45,7 +45,7 @@
     name: ''
     host: "{{ item }}"
     state: absent
-    login_user: root
+    login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_root_password }}"
   with_items:
     - "{{ inventory_hostname }}"
@@ -57,10 +57,23 @@
   mysql_db:
     name: test
     state: absent
-    login_user: root
+    login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_root_password }}"
   notify: Restart mysql service
 
+#Create User Database    
+# - name: creating mysql user (medium_post)
+#   mysql_user:
+#     name: "{{ mysql_user_username }}"
+#     password: "{{ mysql_user_password }}"
+#     priv: '*.*:ALL'
+#     host: '%'
+#     state: present
+
+# - name: creating medium_db
+#   mysql_db:
+#     name: "{{db_name}}"
+#     state: present
 
 - name: Enable remote login to mysql
   lineinfile:

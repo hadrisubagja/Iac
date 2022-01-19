@@ -31,13 +31,14 @@
       host_all: yes
       password: "{{ mysql_new_root_password }}"
   ignore_errors: yes
-# - name: 2. disable remote root login
-#   mysql_user:
-#       login_user: root
-#       login_password: "{{ mysql_new_root_password }}"
-#       user: root
-#       host_all: yes
-#       state: absent
+- name: 2. disable remote root login
+  mysql_user:
+      login_user: root
+      login_password: "{{ mysql_new_root_password }}"
+      user: root
+      host: localhost
+      state: absent
+  ignore_errors: yes
 - name: 3. remove anonymous users
   mysql_user:
       login_user: root
@@ -54,14 +55,6 @@
       db: test
       state: absent
   register: remove_testdb
-  ignore_errors: yes
-- name: 4.1 remove test database priviledges
-  block:
-    - shell: >
-        mysql -u root -p{{ mysql_new_root_password }} 
-        -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'"
-    - shell: mysql -u root -p{{ mysql_new_root_password }} -e "FLUSH PRIVILEGES"
-  when: remove_testdb|changed
   ignore_errors: yes
 
 #Create User Database    

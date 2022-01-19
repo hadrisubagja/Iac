@@ -23,61 +23,61 @@
     state: started
     enabled: true
 
-  # 'localhost' needs to be the last item for idempotency, see
-  # http://ansible.cc/docs/modules.html#mysql-user
-# - name: update mysql root password for all root accounts
-#   mysql_user: 
-#     name: "{{ mysql_root_username }}"
-#     host: 
-#     password: "{{ mysql_root_password }}"
-#     login_user: "{{ mysql_root_username }}"
-#     login_password: "{{ mysql_root_password }}"
-#     check_implicit_admin: yes
-#     priv: "*.*:ALL,GRANT"
-#     state: present
-#   ignore_errors: yes
+- name: 1. set mysql root pass
+  mysql_user:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      user: root
+      host_all: yes
+      password: "{{ mysql_new_root_password }}"
+- name: 2. disable remote root login
+  mysql_user:
+      login_user: root
+      login_password: "{{ mysql_new_root_password }}"
+      user: root
+      host: "{{ ansible_fqdn | lower }}"
+      state: absent
+- name: 3. remove anonymous users
+  mysql_user:
+      login_user: root
+      login_password: "{{ mysql_new_root_password }}"
+      user: ''
+      host_all: yes
+      state: absent
+- name: 4. remove test database
+  mysql_db: 
+      login_user: root
+      login_password: "{{ mysql_new_root_password }}"
+      db: test
+      state: absent
+  register: remove_testdb
+- name: 4.1 remove test database priviledges
+  block:
+    - shell: >
+        mysql -u root -p{{ mysql_new_root_password }} 
+        -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'"
+    - shell: mysql -u root -p{{ mysql_new_root_password }} -e "FLUSH PRIVILEGES"
+  when: remove_testdb|changed
 
-# # - name: Removes all anonymous user accounts
-# #   mysql_user:
-# #     name: ''
-# #     host: "{{ item }}"
-# #     state: absent
-# #     login_user: "{{ mysql_root_username }}"
-# #     login_password: "{{ mysql_root_password }}"
-# #   with_items:
-# #     - "{{ inventory_hostname }}"
-# #     - 127.0.0.1
-# #     - ::1
-# #     - localhost
+#Create User Database    
+- name: creating mysql user (medium_post)
+  mysql_user:
+    name: test
+    password: 1234
+    priv: '*.*:ALL'
+    host: '%'
+    state: present
 
-# - name: Removes the MySQL test database
-#   mysql_db:
-#     name: test
-#     state: absent
-#     login_user: "{{ mysql_root_username }}"
-#     login_password: "{{ mysql_root_password }}"
-#   notify: Restart mysql service
-#   ignore_errors: yes
+- name: creating medium_db
+  mysql_db:
+    name: "{{db_name}}"
+    state: present
 
-# #Create User Database    
-# - name: creating mysql user (medium_post)
-#   mysql_user:
-#     name: test
-#     password: 1234
-#     priv: '*.*:ALL'
-#     host: '%'
-#     state: present
-
-# - name: creating medium_db
-#   mysql_db:
-#     name: "{{db_name}}"
-#     state: present
-
-# - name: Enable remote login to mysql
-#   lineinfile:
-#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-#     regexp: '^bind-address'
-#     line: 'bind-address = 0.0.0.0'
-#     backup: yes
-#   notify:
-#     - Restart mysql service
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  notify:
+    - Restart mysql service

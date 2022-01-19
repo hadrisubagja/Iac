@@ -28,7 +28,7 @@
       login_user: root
       login_password: "{{ mysql_root_password }}"
       user: root
-      host_all: yes
+      host: localhost
       password: "{{ mysql_new_root_password }}"
 - name: 2. disable remote root login
   mysql_user:

@@ -28,15 +28,15 @@
       login_user: root
       login_password: "{{ mysql_root_password }}"
       user: root
-      host: localhost
-      password: "{{ mysql_new_root_password }}"
-- name: 2. disable remote root login
-  mysql_user:
-      login_user: root
-      login_password: "{{ mysql_new_root_password }}"
-      user: root
       host_all: yes
-      state: absent
+      password: "{{ mysql_new_root_password }}"
+# - name: 2. disable remote root login
+#   mysql_user:
+#       login_user: root
+#       login_password: "{{ mysql_new_root_password }}"
+#       user: root
+#       host_all: yes
+#       state: absent
 - name: 3. remove anonymous users
   mysql_user:
       login_user: root

@@ -38,7 +38,7 @@
 
 - name: Removes all anonymous user accounts
   mysql_user:
-    name: root
+    name: ''
     host: "{{ item }}"
     state: absent
     login_user: "{{ mysql_root_username }}"

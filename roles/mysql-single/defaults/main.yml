@@ -1,2 +1,4 @@
 ---
 # defaults file for mysql-single
+mysql_root_username: root
+mysql_root_password: root

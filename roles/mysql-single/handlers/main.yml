@@ -1,2 +1,12 @@
 ---
 # handlers file for mysql-single
+- name: Restart mysql service
+  service:
+    name: mysql
+    state: restarted
+
+- name: Start mysql
+  service:
+    name: mysql
+    state: started
+    enabled: yes

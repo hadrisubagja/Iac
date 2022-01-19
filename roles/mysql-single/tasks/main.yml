@@ -43,10 +43,15 @@
 - name: Removes all anonymous user accounts
   mysql_user:
     name: ''
-    host_all: yes
+    host: "{{ item }}"
     state: absent
     login_user: root
     login_password: "{{ mysql_root_password }}"
+  with_items:
+    - "{{ inventory_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
 
 - name: Removes the MySQL test database
   mysql_db:
@@ -54,3 +59,4 @@
     state: absent
     login_user: root
     login_password: "{{ mysql_root_password }}"
+  notify: Restart mysql service

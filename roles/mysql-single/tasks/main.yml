@@ -34,6 +34,7 @@
     login_password: "{{ mysql_root_password }}"
     check_implicit_admin: yes
     priv: "*.*:ALL,GRANT"
+    state: present
   with_items:
     - "{{ inventory_hostname }}"
     - 127.0.0.1
@@ -61,19 +62,19 @@
     login_password: "{{ mysql_root_password }}"
   notify: Restart mysql service
 
-#Create User Database    
-# - name: creating mysql user (medium_post)
-#   mysql_user:
-#     name: "{{ mysql_user_username }}"
-#     password: "{{ mysql_user_password }}"
-#     priv: '*.*:ALL'
-#     host: '%'
-#     state: present
+Create User Database    
+- name: creating mysql user (medium_post)
+  mysql_user:
+    name: test
+    password: 1234
+    priv: '*.*:ALL'
+    host: '%'
+    state: present
 
-# - name: creating medium_db
-#   mysql_db:
-#     name: "{{db_name}}"
-#     state: present
+- name: creating medium_db
+  mysql_db:
+    name: "{{db_name}}"
+    state: present
 
 - name: Enable remote login to mysql
   lineinfile:

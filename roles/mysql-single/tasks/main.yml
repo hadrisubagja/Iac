@@ -35,7 +35,7 @@
       login_user: root
       login_password: "{{ mysql_new_root_password }}"
       user: root
-      host: "{{ ansible_fqdn | lower }}"
+      host_all: yes
       state: absent
 - name: 3. remove anonymous users
   mysql_user:

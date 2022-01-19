@@ -60,3 +60,13 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
   notify: Restart mysql service
+
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  notify:
+    - Restart mysql service

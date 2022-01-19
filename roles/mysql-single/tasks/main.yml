@@ -1,7 +1,7 @@
 ---
 # tasks file for mysql-single
 - name: Installing Mysql  and dependencies
-  package: name="{{item}}" state=present update_cache:=yes
+  package: name={{ item }} state=present update_cache=yes
   with_items:
    - mysql-common
    - mysql-server

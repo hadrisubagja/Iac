@@ -62,7 +62,7 @@
     login_password: "{{ mysql_root_password }}"
   notify: Restart mysql service
 
-Create User Database    
+#Create User Database    
 - name: creating mysql user (medium_post)
   mysql_user:
     name: test

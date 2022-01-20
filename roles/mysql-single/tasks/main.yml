@@ -66,20 +66,20 @@
     owner: root
     mode: 0600
 
-- name: 4. remove test database
-  mysql_db: 
-      login_user: root
-      login_password: "{{ mysql_new_root_password }}"
-      db: test
-      state: absent
-  register: remove_testdb
-  ignore_errors: yes
-
-
 - name: creating medium_db
   mysql_db:
     name: "{{db_name}}"
     state: present
+
+- name: 4. remove test database
+  mysql_db: 
+      login_user: root
+      login_password: "{{ mysql_new_root_password }}"
+      db: "{{db_name}}"
+      state: absent
+  register: remove_testdb
+  ignore_errors: yes
+
 
 - name: Enable remote login to mysql
   lineinfile:

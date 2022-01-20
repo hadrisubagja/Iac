@@ -1,5 +1,0 @@
----
-# vars file for roles/mysql
-db_user: medium_post
-db_pass: mebium123
-db_name: medium_db

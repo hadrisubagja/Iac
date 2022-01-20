@@ -1,16 +1,13 @@
 ---
-# defaults file for mysql-single
+# defaults root user & password
 mysql_root_username: root
 mysql_root_password: ''
 
 mysql_new_root_password: 'root'
 
-# # defaults file for mysql-single
-# mysql_user_username: test
-# mysql_user_password: test
+# # create new user
+mysql_user_username: test
+mysql_user_password: 1234
 
-
-
-
-# create new database
+# # create new database
 db_name: db_test

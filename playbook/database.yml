@@ -1,8 +1,6 @@
 ---
-- hosts: master 
-  remote_user: root
+- hosts: master
   become: yes
-  become_method: sudo
   gather_facts: no
   vars:
 

@@ -26,7 +26,7 @@
 - name: 1. set mysql root pass
   mysql_user:
       login_user: root
-      login_password: "{{ mysql_root_password }}"
+      login_password: ''
       user: root
       host_all: yes
       password: "{{ mysql_new_root_password }}"

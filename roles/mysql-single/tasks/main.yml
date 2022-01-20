@@ -9,13 +9,13 @@
    - python3-mysqldb
    - libmysqlclient-dev
 
-# - name: copy .my.cnf file with root password credentials
-#   template: 
-#     src: templates/root/.my.cnf.j2
-#     dest: ~/.my.cnf
-#     owner: root
-#     group: root
-#     mode: 0600
+- name: copy .my.cnf file with root password credentials
+  template: 
+    src: .my.cnf.
+    dest: ~/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
 
 - name: Start the MySQL service
   service: 
@@ -31,6 +31,15 @@
       host_all: yes
       password: "{{ mysql_new_root_password }}"
   ignore_errors: yes
+#Create User Database    
+- name: creating mysql user (medium_post)
+  mysql_user:
+    name: test
+    password: 1234
+    priv: '*.*:ALL,GRANT'
+    host: '%'
+    state: present
+  
 # - name: 2. disable remote root login
 #   mysql_user:
 #       login_user: root
@@ -38,6 +47,8 @@
 #       user: root
 #       host_all: yes
 #       state: absent
+#   ignore_errors: yes
+
 - name: 3. remove anonymous users
   mysql_user:
       login_user: root
@@ -46,6 +57,14 @@
       host_all: yes
       state: absent
   ignore_errors: yes
+
+- name: Create `/root/.my.cnf` with root password credentials
+  become: yes
+  template:
+    src:  .my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    mode: 0600
 
 - name: 4. remove test database
   mysql_db: 
@@ -56,14 +75,6 @@
   register: remove_testdb
   ignore_errors: yes
 
-#Create User Database    
-- name: creating mysql user (medium_post)
-  mysql_user:
-    name: test
-    password: 1234
-    priv: '*.*:ALL'
-    host: '%'
-    state: present
 
 - name: creating medium_db
   mysql_db:

@@ -13,5 +13,5 @@
   #      https_proxy: http://proxy.example.com:443
 
   roles:
-   - mysql-single
+   - mysql5.7
   

@@ -46,4 +46,73 @@
     state: started
     enabled: yes
 
+- name: 1. set mysql root pass
+  mysql_user:
+      login_user: "{{ mysql_root_username }}"
+      login_password: ''
+      user: "{{ mysql_root_username }}"
+      host_all: yes
+      password: "{{ mysql_new_root_password }}"
+  ignore_errors: yes
+
+- name: Create `/root/.my.cnf` with root password credentials
+  become: yes
+  template:
+    src:  .root.cnf.j2
+    dest: ~/.my.cnf
+    owner: root
+    mode: 0600
+
+
+#Create User Database    
+- name: creating mysql user (medium_post)
+  mysql_user:
+    name: "{{ mysql_user_username }}"
+    password: "{{ mysql_user_password }}"
+    priv: '*.*:ALL,GRANT'
+    host: '%'
+    state: present
+  
+# - name: 2. disable remote root login
+#   mysql_user:
+#       login_user: root
+#       login_password: ''
+#       user: root
+#       host_all: yes
+#       state: absent
+#   ignore_errors: yes
+
+- name: 3. remove anonymous users
+  mysql_user:
+      login_user: "{{ mysql_root_username }}"
+      login_password: "{{ mysql_new_root_password }}"
+      user: ''
+      host_all: yes
+      state: absent
+  ignore_errors: yes
+
+- name: creating medium_db
+  mysql_db:
+    name: "{{db_name}}"
+    state: present
+
+- name: 4. remove test database
+  mysql_db: 
+      login_user: "{{ mysql_root_username }}"
+      login_password: "{{ mysql_new_root_password }}"
+      db: "{{db_name}}"
+      state: absent
+  register: remove_testdb
+  ignore_errors: yes
+
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  notify:
+    - Restart mysql service
+
 

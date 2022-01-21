@@ -9,7 +9,6 @@
 
 - name: Export Debian Frondend
   shell: export DEBIAN_FRONTEND=noninteractive
-  
 - name: Select Version OS
   shell: echo mysql-apt-config mysql-apt-config/repo-codename select bionic | sudo debconf-set-selections;
 - name: Select Version MySQL
@@ -38,7 +37,7 @@
   shell: apt update
 
 - name: Install MySQL
-  shell: apt install -vvv -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7* -y
+  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
 
 #Start Service
 - name: start and enable mysql service

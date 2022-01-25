@@ -8,7 +8,7 @@
   tags: mysql config
 
 - name: Debuging Export Debian Frondent, Select Version and Tools
-  shell: {{ item }}
+  shell: "{{ item }}"
   with_items:
    - export DEBIAN_FRONTEND=noninteractive
    - echo mysql-apt-config mysql-apt-config/repo-codename select bionic | sudo debconf-set-selections;

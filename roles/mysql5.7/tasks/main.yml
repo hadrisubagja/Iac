@@ -37,7 +37,7 @@
 - name: Copy my.cnf global MySQL configuration.
   template:
     src: my.cnf.j2
-    dest: "{{ mysql_config_file }}"
+    dest: /etc/mysql/my.cnf
     owner: root
     group: root
     mode: 0644
@@ -104,13 +104,13 @@
   ignore_errors: yes
 
 
-- name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/mysql/mysql.conf.d/mysqld.cnf
-    regexp: '^bind-address'
-    line: 'bind-address = 0.0.0.0'
-    backup: yes
-  notify:
-    - Restart mysql
+# - name: Enable remote login to mysql
+#   lineinfile:
+#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+#     regexp: '^bind-address'
+#     line: 'bind-address = 0.0.0.0'
+#     backup: yes
+#   notify:
+#     - Restart mysql
 
 

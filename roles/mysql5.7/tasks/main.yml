@@ -37,7 +37,7 @@
 - name: Copy my.cnf global MySQL configuration.
   template:
     src: my.cnf.j2
-    dest: /etc/mysql/my.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
     owner: root
     group: root
     mode: 0644
@@ -57,7 +57,7 @@
   become: yes
   template:
     src:  .root.cnf.j2
-    dest: ~/.my.cnf
+    dest: ~/my.cnf
     owner: root
     mode: 0600
 

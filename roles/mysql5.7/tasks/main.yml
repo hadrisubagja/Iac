@@ -53,13 +53,14 @@
       password: "{{ mysql_new_root_password }}"
   ignore_errors: yes
 
-- name: Create `/root/.my.cnf` with root password credentials
-  become: yes
-  template:
-    src:  .root.cnf.j2
-    dest: ~/my.cnf
-    owner: root
-    mode: 0600
+
+# - name: Create `/root/.my.cnf` with root password credentials
+#   become: yes
+#   template:
+#     src:  .root.cnf.j2
+#     dest: ~/my.cnf
+#     owner: root
+#     mode: 0600
 
 
 #Create User Database    

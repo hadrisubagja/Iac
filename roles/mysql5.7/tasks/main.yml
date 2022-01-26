@@ -23,7 +23,7 @@
   ignore_errors: yes
 
 - name: DPKG Binary Package
-  shell: export DEBIAN_FRONTEND=noninteractive && dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+  shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
   environment:
     DEBIAN_FRONTEND: noninteractive
 
@@ -31,7 +31,7 @@
   apt: update_cache=yes
 
 - name: Install MySQL
-  shell: apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+  shell: export DEBIAN_FRONTEND=noninteractive && apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
   notify: Start mysql
 
 - name: Copy my.cnf global MySQL configuration.

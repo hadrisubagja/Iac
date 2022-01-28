@@ -1,16 +1,22 @@
 ---
 # tasks file for MySQL
-- name: Task name
+- name: Check directory if exist
   stat:
     path: "{{ dbdatadir }}"
-  register: register_name
+  register: check_directory
 
 - name: Create a data directory if it does not exist
   become: true      
   file:
     path: "{{ dbdatadir }}"
     state: directory
-  when: not register_name.stat.exists
+  when: not check_directory.stat.exists
+
+- name: Check mysql directory if exist
+  stat:
+    path: "{{ dbdatadir }}/mysql"
+  check_mode: yes
+  register: check_directory
 
 - name: Ansible copy files from a directory to remote server
   copy:
@@ -20,6 +26,7 @@
     group: root
     mode: 0644
     remote_src: true
+  when: not check_directory.stat.exists
 
 # - name: Enable remote login to mysql
 #   lineinfile:
@@ -36,13 +43,20 @@
     path: /etc/apparmor.d/tunables/alias
     line: alias /var/lib/mysql/ -> "{{ dbdatadir }}/mysql",
     insertafter: alias*
+    state: present
+
+- name: Ensure AppArmor service is started
+  service:
+    name: 'apparmor'
+    state: 'started'
+    enabled: True
 
 
 - name: Enable remote login to mysql
   lineinfile:
     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-    regexp: '^bind-address'
-    line: 'bind-address = 0.0.0.0'
+    regexp: '^datadir'
+    line: 'datadir = "{{ dbdatadir }}/mysql"'
     backup: yes
   notify:
     - Restart mysql

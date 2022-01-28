@@ -14,8 +14,8 @@
 
 - name: Ansible copy files from a directory to remote server
   copy:
-    src: /var/lib/mysql/*
-    dest: "{{ dbdatadir }}"
+    src: /var/lib/mysql/
+    dest: "{{ dbdatadir }}/"
     owner: root
     group: root
     mode: '0644'

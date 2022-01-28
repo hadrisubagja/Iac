@@ -34,21 +34,21 @@
     remote_src: true
   when: not check_directory.stat.exists
 
-- name: Check mysql directory if exist
-  stat:
-    path: /var/lib/mysql.bak
-  check_mode: yes
-  register: check_directory
+# - name: Check mysql directory if exist
+#   stat:
+#     path: /var/lib/mysql.bak
+#   check_mode: yes
+#   register: check_directory
 
-- name: Rename /var/lib/mysql
-  command: mv /var/lib/mysql /var/lib/mysql.bak
-  when: not check_directory.stat.exists
+# - name: Rename /var/lib/mysql
+#   command: mv /var/lib/mysql /var/lib/mysql.bak
+#   when: not check_directory.stat.exists
 
 - name: Enable remote login to mysql
   lineinfile:
     path: /etc/mysql/mysql.conf.d/mysqld.cnf
     regexp: '^datadir'
-    line: 'datadir = {{ dbdatadir }}/mysql'
+    line: 'datadir = {{ dbdatadir }}'
     backup: yes
 
 # - name: Enable remote login to mysql
@@ -67,7 +67,7 @@
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:
     path: /etc/apparmor.d/tunables/alias
-    line: alias /var/lib/mysql/ -> {{ dbdatadir }}/mysql,
+    line: alias /var/lib/mysql/ -> {{ dbdatadir }}/,
     insertafter: alias*
     state: present
 

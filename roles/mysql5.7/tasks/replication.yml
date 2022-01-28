@@ -50,6 +50,20 @@
     regexp: '^datadir'
     line: 'datadir = {{ dbdatadir }}/mysql'
     backup: yes
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/apparmor.d/usr.sbin.mysqld
+    regexp: '^/var/lib/mysql/'
+    line: '{{ dbdatadir }}/mysql/ r,'
+    backup: yes
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/apparmor.d/usr.sbin.mysqld
+    regexp: '^/var/lib/mysql/**'
+    line: '{{ dbdatadir }}/mysql/ rwk,'
+    backup: yes
   notify:
     - Restart mysql
 

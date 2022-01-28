@@ -57,7 +57,7 @@
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:
     path: /etc/apparmor.d/tunables/alias
-    line: alias /var/lib/mysql/ -> {{ dbdatadir }}/mysql,
+    line: alias /var/lib/mysql/ -> {{ dbdatadir }}/mysql/,
     insertafter: alias*
     state: present
 

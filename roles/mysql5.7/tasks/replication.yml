@@ -1,0 +1,25 @@
+---
+# tasks file for MySQL
+- name: Create a data directory if it does not exist
+  become: true      
+  file:
+    path: "{{ dbdatadir }}"
+    state: directory
+
+# - name: Enable remote login to mysql
+#   lineinfile:
+#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+#     regexp: '^datadir'
+#     line: 'datadir = "{{ dbdatadir }}"'
+#     backup: yes
+#   notify:
+#     - Restart mysql
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 127.0.0.1'
+    backup: yes
+  notify:
+    - Restart mysql

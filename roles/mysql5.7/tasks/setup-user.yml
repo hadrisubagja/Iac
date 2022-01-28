@@ -1,0 +1,48 @@
+---
+
+- name: Copy my.cnf global MySQL configuration.
+  template:
+    src: my.cnf.j2
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    owner: root
+    group: root
+    mode: 0644
+    force: true
+  notify: Restart mysql
+
+#Setup User Root 
+- name: 1. set mysql root pass
+  mysql_user:
+      login_user: "{{ mysql_root_username }}"
+      login_password: ''
+      user: "{{ mysql_root_username }}"
+      host_all: yes
+      password: "{{ mysql_new_root_password }}"
+  ignore_errors: yes
+
+# - name: Create `/root/.my.cnf` with root password credentials
+#   become: yes
+#   template:
+#     src:  .root.cnf.j2
+#     dest: ~/my.cnf
+#     owner: root
+#     mode: 0600
+
+
+#Create User Database    
+- name: creating mysql user (medium_post)
+  mysql_user:
+    name: "{{ mysql_user_username }}"
+    password: "{{ mysql_user_password }}"
+    priv: '*.*:ALL,GRANT'
+    host: '%'
+    state: present
+
+- name: 3. remove anonymous users
+  mysql_user:
+      login_user: "{{ mysql_root_username }}"
+      login_password: "{{ mysql_new_root_password }}"
+      user: ''
+      host_all: yes
+      state: absent
+  ignore_errors: yes

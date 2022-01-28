@@ -1,0 +1,32 @@
+---
+- name: Download MySQL Repository
+  get_url:
+    url: https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+    dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
+  tags: mysql config
+
+- name: Add PGP key
+  apt_key:
+    keyserver: hkp://pgp.mit.edu:80
+    id: 467B942D3A79BD29
+  ignore_errors: yes
+
+- name: Debuging Export Debian Frondent, Select Version and Tools
+  shell: "{{ item }}"
+  with_items:
+   - echo mysql-apt-config mysql-apt-config/repo-codename select bionic | sudo debconf-set-selections;
+   - echo mysql-apt-config mysql-apt-config/select-server select mysql-5.7 | sudo debconf-set-selections;
+   - echo mysql-apt-config mysql-apt-config/select-tools select Enabled | sudo debconf-set-selections;
+   - echo mysql-apt-config mysql-apt-config/select-preview select Disabled | sudo debconf-set-selections;
+
+- name: DPKG Binary Package
+  shell: dpkg -i /tmp/mysql-apt-config_0.8.12-1_all.deb
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Update Package
+  apt: update_cache=yes
+
+- name: Install MySQL
+  shell: export DEBIAN_FRONTEND=noninteractive && apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+  notify: Start mysql

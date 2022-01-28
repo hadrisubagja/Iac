@@ -18,21 +18,15 @@
     state: stopped
     enabled: yes
 
-- name: Check mysql directory if exist
-  stat:
-    path: "{{ dbdatadir }}"
-  check_mode: yes
-  register: check_directory
 
 - name: Ansible copy files from a directory to remote server
   copy:
     src: /var/lib/mysql/
-    dest: "{{ dbdatadir }}"
+    dest: "{{ dbdatadir }}/"
     owner: root
     group: root
     mode: 0644
     remote_src: true
-  when: not check_directory.stat.exists
 
 # - name: Check mysql directory if exist
 #   stat:

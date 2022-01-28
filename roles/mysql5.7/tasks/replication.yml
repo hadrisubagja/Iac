@@ -12,6 +12,12 @@
     state: directory
   when: not check_directory.stat.exists
 
+- name: Start mysql
+  service:
+    name: mysql
+    state: stopped
+    enabled: yes
+
 - name: Check mysql directory if exist
   stat:
     path: "{{ dbdatadir }}/mysql"

@@ -1,12 +1,13 @@
 ---
 # handlers file for roles/mysql
-- name: Restart mysql
-  service:
-    name: mysql
-    state: restarted
-
 - name: Start mysql
   service:
     name: mysql
     state: started
     enabled: yes
+    
+- name: Restart mysql
+  service:
+    name: mysql
+    state: restarted
+

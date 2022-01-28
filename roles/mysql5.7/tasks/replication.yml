@@ -12,7 +12,7 @@
     state: directory
   when: not check_directory.stat.exists
 
-- name: Start mysql
+- name: Stop mysql Service
   service:
     name: mysql
     state: stopped

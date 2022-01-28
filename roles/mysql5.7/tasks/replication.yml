@@ -28,14 +28,17 @@
     remote_src: true
   when: not check_directory.stat.exists
 
-# - name: Enable remote login to mysql
-#   lineinfile:
-#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-#     regexp: '^datadir'
-#     line: 'datadir = "{{ dbdatadir }}"'
-#     backup: yes
-#   notify:
-#     - Restart mysql
+- name: Rename /var/lib/mysql
+  command: mv /var/lib/mysql /var/lib/mysql.bak
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^datadir'
+    line: 'datadir = "{{ dbdatadir }}"/mysql'
+    backup: yes
+  notify:
+    - Restart mysql
 
 
 - name: Inserting a line after a pattern in Ansible example 
@@ -48,15 +51,16 @@
 - name: Ensure AppArmor service is started
   service:
     name: 'apparmor'
-    state: 'started'
+    state: 'restarted'
     enabled: True
+  notify: Restart mysql
 
 
-- name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/mysql/mysql.conf.d/mysqld.cnf
-    regexp: '^datadir'
-    line: 'datadir = "{{ dbdatadir }}/mysql"'
-    backup: yes
-  notify:
-    - Restart mysql
+# - name: Enable remote login to mysql
+#   lineinfile:
+#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+#     regexp: '^bind-address'
+#     line: 'bind-address = 0.0.0.0'
+#     backup: yes
+#   notify:
+#     - Restart mysql

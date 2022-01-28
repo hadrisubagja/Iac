@@ -16,6 +16,9 @@
   copy:
     src: /var/lib/mysql/
     dest: "{{ dbdatadir }}"
+    owner: root
+    group: root
+    mode: '0644'
 
 # - name: Enable remote login to mysql
 #   lineinfile:

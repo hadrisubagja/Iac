@@ -51,17 +51,17 @@
     line: 'datadir = {{ dbdatadir }}/mysql'
     backup: yes
 
-- name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/apparmor.d/usr.sbin.mysqld
-    regexp: '^/var/lib/mysql/'
-    line: '{{ item }}'
-    backup: yes
-  with_items:
-   - '{{ dbdatadir }}/mysql/ r,'
-   - '{{ dbdatadir }}/mysql/ rwk,'
-  notify:
-    - Restart mysql
+# - name: Enable remote login to mysql
+#   lineinfile:
+#     path: /etc/apparmor.d/usr.sbin.mysqld
+#     regexp: '^/var/lib/mysql/'
+#     line: '{{ item }}'
+#     backup: yes
+#   with_items:
+#    - '{{ dbdatadir }}/mysql/ r,'
+#    - '{{ dbdatadir }}/mysql/ rwk,'
+#   notify:
+#     - Restart mysql
 
 
 - name: Inserting a line after a pattern in Ansible example 

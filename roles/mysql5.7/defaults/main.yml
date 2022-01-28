@@ -11,3 +11,8 @@ mysql_user_password: 1234
 
 # # create new database
 db_name: db_test
+
+# create directory
+dbservicename: myapk   # optional to the application name
+dbversion: 10
+dbdatadir: "/home/hadrisubagja/{{ dbservicename }}/mysql/data"

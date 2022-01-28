@@ -55,15 +55,11 @@
   lineinfile:
     path: /etc/apparmor.d/usr.sbin.mysqld
     regexp: '^/var/lib/mysql/'
-    line: '{{ dbdatadir }}/mysql/ r,'
+    line: '{{ item }}'
     backup: yes
-
-- name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/apparmor.d/usr.sbin.mysqld
-    regexp: '^/var/lib/mysql/**'
-    line: '{{ dbdatadir }}/mysql/ rwk,'
-    backup: yes
+  with_items:
+   - '{{ dbdatadir }}/mysql/ r,'
+   - '{{ dbdatadir }}/mysql/ rwk,'
   notify:
     - Restart mysql
 

@@ -28,8 +28,15 @@
     remote_src: true
   when: not check_directory.stat.exists
 
+- name: Check mysql directory if exist
+  stat:
+    path: /var/lib/mysql.bak
+  check_mode: yes
+  register: check_directory
+
 - name: Rename /var/lib/mysql
   command: mv /var/lib/mysql /var/lib/mysql.bak
+  when: not check_directory.stat.exists
 
 - name: Enable remote login to mysql
   lineinfile:

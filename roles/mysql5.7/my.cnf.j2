@@ -88,9 +88,13 @@ long_query_time      = 1
 # Replication
 server-id = {{ mysql_server_id }}
 
+{% if mysql_replication_role == 'master' %}
 log_bin			= /var/log/mysql/mysql-bin.log
 expire_logs_days	= 14
 max_binlog_size         = 1G
+
+{% for db in mysql_databases %}
+{% if db.replicate|default(1) %}
 #binlog_do_db		= include_database_name
 #binlog_ignore_db	= include_database_name
 #

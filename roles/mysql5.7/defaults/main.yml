@@ -15,9 +15,8 @@ mysql_replication_role: master
 # create replica user
 # mysql_repl_username: test
 # mysql_repl_password: 1234
-mysql_replication_user:
- - name: test
-   password: 1234
+mysql_replication_user: test
+mysql_replication_password: 1234
 
 
 # # create new database

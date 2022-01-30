@@ -9,7 +9,7 @@
     priv: "{{ mysql_replication_user.priv | default('*.*:REPLICATION SLAVE,REPLICATION CLIENT') }}"
     state: present
   when:
-    - mysql_replication_role == 'master'
+    - mysql_role == 'master'
 
 - name: Check slave replication status.
   mysql_replication:
@@ -19,7 +19,7 @@
   ignore_errors: true
   register: slave
   when:
-    - mysql_replication_role == 'slave'
+    - mysql_role == 'slave'
 
 - name: Get the current master servers replication status 
   mysql_replication: 
@@ -28,7 +28,7 @@
     login_password: "{{ mysql_new_root_password }}"
     delegate_to: "{{  mysql_replication_master }}"
   register: repl_stat 
-  when: slave | failed and mysql_replication_role == 'slave' and  mysql_replication_master is defined
+  when: mysql_role == 'slave'
 
 - name: Change the master in slave to start the replication 
   mysql_replication: 
@@ -40,11 +40,11 @@
     master_log_pos: "{{ repl_stat.Position }}"
     master_user: "{{ mysql_replication_user }}"
     master_password: "{{ mysql_replication_password }}" 
-  when: slave | failed and mysql_replication_role == 'slave' and mysql_replication_master is defined 
+  when: mysql_role == 'slave'
 
 - name: start slave in slave to start the replication 
   mysql_replication: 
     mode: startslave 
     login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_new_root_password }}"
-  when: slave | failed and mysql_repl_role == 'slave' and mysql_repl_master is defined
+  when: mysql_role == 'slave'

@@ -3,12 +3,11 @@
   mysql_user:
     login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_root_password }}"
-    name: "{{ item.name }}"
-    host: "{{ item.host | default('%') }}"
-    password: "{{ item.password }}"
-    priv: "{{ item.priv | default('*.*:REPLICATION SLAVE,REPLICATION CLIENT') }}"
+    name: "{{ mysql_replication_user.name }}"
+    host: "{{ mysql_replication_user.host | default('%') }}"
+    password: "{{ mysql_replication_user.password }}"
+    priv: "{{ mysql_replication_user.priv | default('*.*:REPLICATION SLAVE,REPLICATION CLIENT') }}"
     state: present
-  with_items: mysql_replication_user 
   when:
     - mysql_replication_role == 'master'
 

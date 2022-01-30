@@ -9,12 +9,12 @@ mysql_new_root_password: 'root'
 mysql_user_username: test
 mysql_user_password: 1234
 
+server_id: 1
+
 # configure replication
 mysql_replication_role: master
 
 # create replica user
-# mysql_repl_username: test
-# mysql_repl_password: 1234
 mysql_replication_user: test
 mysql_replication_password: 1234
 

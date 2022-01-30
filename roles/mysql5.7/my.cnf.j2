@@ -83,20 +83,30 @@ long_query_time      = 1
 # The following can be used as easy to replay backup logs or for replication.
 # note: if you are setting up a replication slave, see README.Debian about
 #       other settings you may need to change.
+
+{% if mysql_replication_master %}
 server-id		= {{ server_id }}
 
-
+{% if mysql_replication_role == 'master' %}
 log_bin			= /var/log/mysql/mysql-bin.log
 expire_logs_days	= 14
 max_binlog_size         = 1G
 
-
+{% for db in mysql_databases %}
+{% if db.replicate|default(1) %}
 #binlog_do_db		= include_database_name
-
-
-{% for i in mysql_db %} 
-{% if not i.replicate|default(1) %} 
+{% else %}
 #binlog_ignore_db	= include_database_name
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if mysql_replication_role == 'slave' %}
+read_only
+relay-log = relay-bin
+relay-log-index = relay-bin.index
+{% endif %}
+{% endif %}
 #
 # * InnoDB
 #
@@ -137,7 +147,3 @@ max_allowed_packet	= 16M
 # * IMPORTANT: Additional settings that can override those from this file!
 #   The files must end with '.cnf', otherwise they'll be ignored.
 #
-
-{% if mysql_repl_role == 'slave' %} 
-read_only=ON
-{% endif %}

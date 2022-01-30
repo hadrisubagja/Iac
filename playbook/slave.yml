@@ -1,5 +1,5 @@
 ---
-- hosts: master
+- hosts: database:master
   remote_user: root
   become: yes
   gather_facts: no

@@ -11,7 +11,6 @@
   with_items: mysql_replication_user 
   when:
     - mysql_replication_role == 'master'
-    - mysql_replication_user.name is defined
 
 - name: Check slave replication status.
   mysql_replication:
@@ -30,7 +29,7 @@
     login_password: "{{ mysql_new_root_password }}"
     delegate_to: "{{  mysql_replication_master }}"
   register: repl_stat 
-  when: slave|failed and mysql_replication_role == 'slave' and  mysql_replication_master is defined
+  when: slave | failed and mysql_replication_role == 'slave' and  mysql_replication_master is defined
 
 - name: Change the master in slave to start the replication 
   mysql_replication: 
@@ -42,11 +41,11 @@
     master_log_pos: "{{ repl_stat.Position }}"
     master_user: "{{ mysql_replication_user.name }}"
     master_password: "{{ mysql_replication_user.pass }}" 
-  when: slave|failed and mysql_replication_role == 'slave' and mysql_replication_master is defined 
+  when: slave | failed and mysql_replication_role == 'slave' and mysql_replication_master is defined 
 
 - name: start slave in slave to start the replication 
   mysql_replication: 
     mode: startslave 
     login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_new_root_password }}"
-  when: slave|failed and mysql_repl_role == 'slave' and mysql_repl_master is defined
+  when: slave | failed and mysql_repl_role == 'slave' and mysql_repl_master is defined

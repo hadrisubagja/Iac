@@ -11,7 +11,7 @@
   notify: Restart mysql
 
 #Setup User Root 
-- name: 1. set mysql root pass
+- name: Set mysql root pass
   mysql_user:
     login_user: "{{ mysql_root_username }}"
     login_password: ''

@@ -9,17 +9,20 @@ mysql_new_root_password: 'root'
 mysql_user_username: test
 mysql_user_password: 1234
 
+# configure replication
+mysql_replication_role: master
+
+# create replica user
+# mysql_repl_username: test
+# mysql_repl_password: 1234
+mysql_replication_user:
+ - name: test
+   password: 1234
+
+
 # # create new database
 db_name: db_test
 
-# Configure Replication
-mysql_server_id: "1"
-mysql_replication_role: ''
-mysql_replication_master: ''
-# Same keys as `mysql_users` above.
-mysql_replication_user: []
-
-mysql_databases: []
 # create directory
 dbservicename: myapk   # optional to the application name
 dbversion: 10

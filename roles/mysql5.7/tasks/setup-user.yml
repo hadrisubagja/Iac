@@ -11,14 +11,12 @@
   notify: Restart mysql
 
 #Setup User Root 
-- name: 1. set mysql root pass
-  mysql_user:
-      login_user: "{{ mysql_root_username }}"
-      login_password: ''
-      user: "{{ mysql_root_username }}"
-      host_all: yes
-      password: "{{ mysql_new_root_password }}"
-  ignore_errors: yes
+- mysql_user:
+    login_user: "{{ mysql_root_username }}"
+    login_password: ''
+    user: "{{ mysql_root_username }}"
+    host_all: yes
+    password: "{{ mysql_new_root_password }}"
 
 # - name: Create `/root/.my.cnf` with root password credentials
 #   become: yes

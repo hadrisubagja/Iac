@@ -12,7 +12,15 @@ mysql_user_password: 1234
 # # create new database
 db_name: db_test
 
+# Configure Replication
+mysql_server_id: "1"
+mysql_replication_role: ''
+mysql_replication_master: ''
+# Same keys as `mysql_users` above.
+mysql_replication_user: []
+
 # create directory
 dbservicename: myapk   # optional to the application name
 dbversion: 10
 dbdatadir: "/home/hadrisubagja/{{ dbservicename }}/mysql/data"
+

@@ -1,50 +1,58 @@
 ---
 - name: Ensure replication user exists on master.
   mysql_user:
-    login_user: "{{ mysql_root_username }}"
-    login_password: "{{ mysql_new_root_password }}"
-    name: "{{ mysql_replication_user }}"
+    name: "{{ mysql_replication_user.name }}"
     host: "{{ mysql_replication_user.host | default('%') }}"
-    password: "{{ mysql_replication_password }}"
+    password: "{{ mysql_replication_user.password }}"
     priv: "{{ mysql_replication_user.priv | default('*.*:REPLICATION SLAVE,REPLICATION CLIENT') }}"
     state: present
   when:
-    - mysql_role == 'master'
+    - mysql_replication_role == 'master'
+    - mysql_replication_user.name is defined
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']
 
 - name: Check slave replication status.
   mysql_replication:
     mode: getslave
-    login_user: "{{ mysql_replication_user }}"
-    login_password: "{{mysql_replication_password }}"
+    login_user: "{{ mysql_replication_user.name }}"
+    login_password: "{{ mysql_replication_user.password }}"
   ignore_errors: true
   register: slave
   when:
-    - mysql_role == 'slave'
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']
 
-- name: Get the current master servers replication status 
-  mysql_replication: 
-    mode: getmaster 
-    login_user: "{{ mysql_root_username }}"
-    login_password: "{{ mysql_new_root_password }}"
-    delegate_to: "{{  mysql_replication_master }}"
-  register: repl_stat 
-  when: mysql_role == 'slave'
+- name: Check master replication status.
+  mysql_replication: mode=getmaster
+  delegate_to: "{{ mysql_replication_master }}"
+  register: master
+  when:
+    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']
 
-- name: Change the master in slave to start the replication 
-  mysql_replication: 
+- name: Configure replication on the slave.
+  mysql_replication:
     mode: changemaster
-    login_user: "{{ mysql_root_username }}" 
-    login_password: "{{ mysql_new_root_password }}"
     master_host: "{{ mysql_replication_master }}"
-    master_log_file: "{{ repl_stat.File }}" 
-    master_log_pos: "{{ repl_stat.Position }}"
-    master_user: "{{ mysql_replication_user }}"
-    master_password: "{{ mysql_replication_password }}" 
-  when: mysql_role == 'slave'
+    master_user: "{{ mysql_replication_user.name }}"
+    master_password: "{{ mysql_replication_user.password }}"
+    master_log_file: "{{ master.File }}"
+    master_log_pos: "{{ master.Position }}"
+  ignore_errors: true
+  when:
+    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - mysql_replication_user.name is defined
+    - (mysql_replication_master | length) > 0
 
-- name: start slave in slave to start the replication 
-  mysql_replication: 
-    mode: startslave 
-    login_user: "{{ mysql_root_username }}"
-    login_password: "{{ mysql_new_root_password }}"
-  when: mysql_role == 'slave'
+- name: Start replication.
+  mysql_replication: mode=startslave
+  when:
+    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']

@@ -1,7 +1,6 @@
 [database]
-db1 ansible_ssh_host=34.101.100.223 mysql_role=master server_id=1
-db2 ansible_connection=local mysql_role=slave server_id=2
+db1 ansible_ssh_host=34.101.100.223
+db2 ansible_connection=local
 
 [database:vars]
 ansible_ssh_private_key_file= ~/.ssh/ansible.pem
-mysql_replication_master: 34.101.100.223

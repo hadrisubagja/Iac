@@ -1,83 +1,58 @@
 ---
-# tasks file for MySQL
-- name: Check directory if exist
-  stat:
-    path: "{{ dbdatadir }}"
-  register: check_directory
-
-- name: Create a data directory if it does not exist
-  become: true      
-  file:
-    path: "{{ dbdatadir }}"
-    state: directory
-  when: not check_directory.stat.exists
-
-- name: Stop mysql Service
-  service:
-    name: mysql
-    state: stopped
-    enabled: yes
-
-
-- name: Ansible copy files from a directory to remote server
-  copy:
-    src: /var/lib/mysql/
-    dest: "{{ dbdatadir }}/"
-    owner: root
-    group: root
-    mode: 0644
-    remote_src: true
-
-# - name: Check mysql directory if exist
-#   stat:
-#     path: /var/lib/mysql.bak
-#   check_mode: yes
-#   register: check_directory
-
-# - name: Rename /var/lib/mysql
-#   command: mv /var/lib/mysql /var/lib/mysql.bak
-#   when: not check_directory.stat.exists
-
-- name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/mysql/mysql.conf.d/mysqld.cnf
-    regexp: '^datadir'
-    line: 'datadir = {{ dbdatadir }}'
-    backup: yes
-
-# - name: Enable remote login to mysql
-#   lineinfile:
-#     path: /etc/apparmor.d/usr.sbin.mysqld
-#     regexp: '^/var/lib/mysql/'
-#     line: '{{ item }}'
-#     backup: yes
-#   with_items:
-#    - '{{ dbdatadir }}/mysql/ r,'
-#    - '{{ dbdatadir }}/mysql/ rwk,'
-#   notify:
-#     - Restart mysql
-
-
-- name: Inserting a line after a pattern in Ansible example 
-  lineinfile:
-    path: /etc/apparmor.d/tunables/alias
-    line: alias /var/lib/mysql/ -> {{ dbdatadir }},
-    insertafter: alias*
+- name: Ensure replication user exists on master.
+  mysql_user:
+    name: "{{ mysql_replication_user.name }}"
+    host: "{{ mysql_replication_user.host | default('%') }}"
+    password: "{{ mysql_replication_user.password }}"
+    priv: "{{ mysql_replication_user.priv | default('*.*:REPLICATION SLAVE,REPLICATION CLIENT') }}"
     state: present
+  when:
+    - mysql_replication_role == 'master'
+    - mysql_replication_user.name is defined
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']
 
-- name: Ensure AppArmor service is started
-  service:
-    name: 'apparmor'
-    state: 'restarted'
-    enabled: True
-  notify: Restart mysql
+- name: Check slave replication status.
+  mysql_replication:
+    mode: getslave
+    login_user: "{{ mysql_replication_user.name }}"
+    login_password: "{{ mysql_replication_user.password }}"
+  ignore_errors: true
+  register: slave
+  when:
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']
 
+- name: Check master replication status.
+  mysql_replication: mode=getmaster
+  delegate_to: "{{ mysql_replication_master }}"
+  register: master
+  when:
+    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']
 
-# - name: Enable remote login to mysql
-#   lineinfile:
-#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-#     regexp: '^bind-address'
-#     line: 'bind-address = 0.0.0.0'
-#     backup: yes
-#   notify:
-#     - Restart mysql
+- name: Configure replication on the slave.
+  mysql_replication:
+    mode: changemaster
+    master_host: "{{ mysql_replication_master }}"
+    master_user: "{{ mysql_replication_user.name }}"
+    master_password: "{{ mysql_replication_user.password }}"
+    master_log_file: "{{ master.File }}"
+    master_log_pos: "{{ master.Position }}"
+  ignore_errors: true
+  when:
+    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - mysql_replication_user.name is defined
+    - (mysql_replication_master | length) > 0
+
+- name: Start replication.
+  mysql_replication: mode=startslave
+  when:
+    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+  tags: ['skip_ansible_galaxy']

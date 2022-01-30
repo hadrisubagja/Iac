@@ -1,0 +1,72 @@
+---
+# tasks file for MySQL
+- name: Check directory if exist
+  stat:
+    path: "{{ dbdatadir }}"
+  register: check_directory
+
+- name: Create a data directory if it does not exist
+  become: true      
+  file:
+    path: "{{ dbdatadir }}"
+    state: directory
+  when: not check_directory.stat.exists
+
+- name: Stop mysql Service
+  service:
+    name: mysql
+    state: stopped
+    enabled: yes
+
+- name: Ansible copy files from a directory to remote server
+  copy:
+    src: /var/lib/mysql/
+    dest: "{{ dbdatadir }}/"
+    owner: root
+    group: root
+    mode: 0644
+    remote_src: true
+
+# - name: Check mysql directory if exist
+#   stat:
+#     path: /var/lib/mysql.bak
+#   check_mode: yes
+#   register: check_directory
+
+# - name: Rename /var/lib/mysql
+#   command: mv /var/lib/mysql /var/lib/mysql.bak
+#   when: not check_directory.stat.exists
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^datadir'
+    line: 'datadir = {{ dbdatadir }}'
+    backup: yes
+
+# - name: Enable remote login to mysql
+#   lineinfile:
+#     path: /etc/apparmor.d/usr.sbin.mysqld
+#     regexp: '^/var/lib/mysql/'
+#     line: '{{ item }}'
+#     backup: yes
+#   with_items:
+#    - '{{ dbdatadir }}/mysql/ r,'
+#    - '{{ dbdatadir }}/mysql/ rwk,'
+#   notify:
+#     - Restart mysql
+
+
+- name: Inserting a line after a pattern in Ansible example 
+  lineinfile:
+    path: /etc/apparmor.d/tunables/alias
+    line: alias /var/lib/mysql/ -> {{ dbdatadir }},
+    insertafter: alias*
+    state: present
+
+- name: Ensure AppArmor service is started
+  service:
+    name: 'apparmor'
+    state: 'restarted'
+    enabled: True
+  notify: Restart mysql

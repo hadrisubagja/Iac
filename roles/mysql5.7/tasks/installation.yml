@@ -30,3 +30,12 @@
 - name: Install MySQL
   shell: export DEBIAN_FRONTEND=noninteractive && apt install -y -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
   notify: Start mysql
+
+- name: Installing dependencies
+  package:
+   name: "{{item}}"
+   state: present
+   update_cache: yes
+  with_items:
+   - python3-mysqldb
+   - libmysqlclient-dev

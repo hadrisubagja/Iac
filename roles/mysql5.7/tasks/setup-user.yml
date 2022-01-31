@@ -30,7 +30,7 @@
 
 
 #Create User Database    
-- name: creating mysql user (medium_post)
+- name: creating mysql user
   mysql_user:
     login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_new_root_password }}"

@@ -12,5 +12,7 @@
 
 - name: creating medium_db
   mysql_db:
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_new_root_password }}"
     name: "{{db_name}}"
     state: present

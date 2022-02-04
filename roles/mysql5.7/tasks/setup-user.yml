@@ -18,6 +18,7 @@
     host_all: yes
     password: "{{ mysql_new_root_password }}"
     login_unix_socket: /var/lib/mysql/mysql.sock
+    state: present
   ignore_errors: yes
 
 

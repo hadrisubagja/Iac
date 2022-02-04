@@ -102,6 +102,7 @@ max_binlog_size         = 1G
 {% endif %}
 
 {% if mysql_replication_role == 'slave' %}
+server-id		= 2
 read_only
 relay-log = relay-bin
 relay-log-index = relay-bin.index

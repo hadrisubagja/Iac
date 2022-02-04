@@ -26,6 +26,8 @@
 - name: Check master replication status.
   mysql_replication: 
     mode: getprimary
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_new_root_password }}"
   # delegate_to: "{{ mysql_replication_master }}"
   register: master
   when:

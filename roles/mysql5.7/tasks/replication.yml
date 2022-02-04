@@ -27,8 +27,8 @@
     regexp: "{{ mysql_replication_master }}" 
     line: "{{ mysql_replication_master + ' ' + hostvars[mysql_replication_master].ansible_default_ipv4.address }}"
     state: present 
-  when: slave|failed and mysql_replication_role == 'slave' and mysql_replication_master is defined 
-  
+  when: 
+   - mysql_replication_role == 'slave'
 
 - name: Check master replication status.
   mysql_replication: 

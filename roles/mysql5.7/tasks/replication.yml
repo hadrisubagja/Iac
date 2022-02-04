@@ -46,7 +46,6 @@
     master_password: 1234
     master_log_file: "{{ master.File }}"
     master_log_pos: "{{ master.Position }}"
-    state: present
   when:
     - mysql_replication_role == 'slave'
     

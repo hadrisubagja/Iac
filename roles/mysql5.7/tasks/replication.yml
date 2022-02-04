@@ -8,7 +8,6 @@
     state: present
   when:
     - mysql_replication_role == 'master'
-    - mysql_replication_user.name is defined
     
   
 
@@ -22,6 +21,13 @@
     - mysql_replication_role == 'slave'
   notify: Restart mysql
     
+- name: Ensure the hostname entry for master is available for the client. 
+  lineinfile: 
+    dest: /etc/hosts 
+    regexp: "{{ mysql_replication_master }}" 
+    line: "{{ mysql_replication_master + ' ' + hostvars[mysql_replication_master].ansible_default_ipv4.address }}"
+    state: present 
+  when: slave|failed and mysql_replication_role == 'slave' and mysql_replication_master is defined 
   
 
 - name: Check master replication status.

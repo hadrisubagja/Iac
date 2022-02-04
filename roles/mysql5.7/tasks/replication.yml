@@ -38,6 +38,8 @@
 - name: Configure replication on the slave.
   mysql_replication:
     mode: changeprimary
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_new_root_password }}"
     master_host: 34.101.100.223
     master_user: 'repl'
     master_password: 1234

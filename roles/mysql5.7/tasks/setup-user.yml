@@ -10,6 +10,9 @@
     force: true
   notify: Restart mysql
 
+- name: Restart mysql
+  service: name=mysql enabled=yes state=restarted
+
 
 #Setup User Root 
 - name: Setup mysql root pass

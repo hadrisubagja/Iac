@@ -28,7 +28,7 @@
     mode: getprimary
     login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_new_root_password }}"
-  # delegate_to: "{{ mysql_replication_master }}"
+  delegate_to: 34.101.100.223
   register: master
   when:
     - mysql_replication_role == 'slave'
@@ -38,18 +38,21 @@
 - name: Configure replication on the slave.
   mysql_replication:
     mode: changeprimary
-    master_host: "{{ mysql_replication_master }}"
+    master_host: 34.101.100.223
     master_user: 'repl'
     master_password: 1234
-    master_log_file: "{{ master.File }}"
-    master_log_pos: "{{ master.Position }}"
+    master_log_file: "{{ master.primary_log_file }}"
+    master_log_pos: "{{ master.primary_log_pos }}"
   when:
     - mysql_replication_role == 'slave'
     - mysql_replication_user.name is defined
     
 
 - name: Start replication.
-  mysql_replication: mode=startreplica
+  mysql_replication: 
+    mode: startreplica
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_new_root_password }}"
   when:
     - mysql_replication_role == 'slave'
     

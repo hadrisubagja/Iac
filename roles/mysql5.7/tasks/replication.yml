@@ -17,7 +17,6 @@
     mode: getslave
     login_user: "{{ mysql_replication_user.name }}"
     login_password: "{{ mysql_replication_user.password }}"
-  ignore_errors: true
   register: slave
   when:
     - mysql_replication_role == 'slave'
@@ -42,7 +41,6 @@
     master_password: "{{ mysql_replication_user.password }}"
     master_log_file: "{{ master.File }}"
     master_log_pos: "{{ master.Position }}"
-  ignore_errors: true
   when:
     - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'

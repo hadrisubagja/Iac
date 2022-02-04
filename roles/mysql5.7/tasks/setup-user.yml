@@ -14,10 +14,10 @@
 #Setup User Root 
 - name: Setup mysql root pass
   mysql_user:
-      user: "{{ mysql_root_username }}"
-      host_all: yes
-      password: "{{ mysql_new_root_password }}"
-  state: present
+    user: "{{ mysql_root_username }}"
+    host_all: yes
+    password: "{{ mysql_new_root_password }}"
+    state: present
   ignore_errors: yes
 
 

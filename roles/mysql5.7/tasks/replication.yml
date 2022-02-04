@@ -41,8 +41,8 @@
     master_host: 34.101.100.223
     master_user: 'repl'
     master_password: 1234
-    master_log_file: "{{ master.primary_log_file }}"
-    master_log_pos: "{{ master.primary_log_pos }}"
+    master_log_file: "{{ master.File }}"
+    master_log_pos: "{{ master.Position }}"
   when:
     - mysql_replication_role == 'slave'
     - mysql_replication_user.name is defined

@@ -13,4 +13,4 @@
   gather_facts: no
   
   roles:
-   - {role: mysql5.7, server_id: 2, mysql_replication_role: slave}
+   - {role: mysql5.7, server_id: 2, mysql_replication_role: slave, mysql_replication_master: 34.101.100.223}

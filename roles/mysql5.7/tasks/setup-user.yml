@@ -17,7 +17,7 @@
     user: "{{ mysql_root_username }}"
     host_all: yes
     password: "{{ mysql_new_root_password }}"
-    state: present
+    login_unix_socket: /var/lib/mysql/mysql.sock
   ignore_errors: yes
 
 

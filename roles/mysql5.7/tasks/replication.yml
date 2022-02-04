@@ -23,9 +23,9 @@
     
 - name: Ensure the hostname entry for master is available for the client. 
   lineinfile: 
-    dest: /etc/hosts 
-    regexp: "{{ mysql_replication_master }}" 
+    dest: /etc/hosts
     line: "{{ mysql_replication_master + ' ' + hostvars[mysql_replication_master].ansible_default_ipv4.address }}"
+    insertafter: 127*
     state: present 
   when: 
    - mysql_replication_role == 'slave'

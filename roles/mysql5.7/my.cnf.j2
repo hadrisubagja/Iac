@@ -86,10 +86,9 @@ long_query_time      = 1
 
 
 server-id		= {{ server_id }}
-
-
-{% if mysql_replication_role == 'master' %}
 log_bin			= /var/log/mysql/mysql-bin.log
+
+
 expire_logs_days	= 14
 max_binlog_size         = 100M
 
@@ -100,12 +99,11 @@ max_binlog_size         = 100M
 #binlog_ignore_db	= include_database_name
 {% endif %}
 {% endfor %}
-{% endif %}
+
 
 {% if mysql_replication_role == 'slave' %}
 read_only
-relay-log = relay-bin
-relay-log-index = relay-bin.index
+relay-log = /var/log/mysql/mysql-relay-bin.log
 {% endif %}
 
 log_slave_updates

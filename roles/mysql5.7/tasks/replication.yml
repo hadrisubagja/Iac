@@ -20,8 +20,7 @@
   register: slave
   when:
     - mysql_replication_role == 'slave'
-  notify:
-   - Restart mysql
+  notify: Restart mysql
     
   
 

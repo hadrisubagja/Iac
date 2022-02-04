@@ -8,6 +8,8 @@
     state: present
   when:
     - mysql_replication_role == 'master'
+    - mysql_replication_user.name is defined
+    - (mysql_replication_master | length) > 0
   
 
 - name: Check slave replication status.
@@ -19,6 +21,7 @@
   register: slave
   when:
     - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
   
 
 - name: Check master replication status.
@@ -28,6 +31,7 @@
   when:
     - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
   
 
 - name: Configure replication on the slave.
@@ -42,10 +46,13 @@
   when:
     - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'
+    - mysql_replication_user.name is defined
+    - (mysql_replication_master | length) > 0
 
 - name: Start replication.
   mysql_replication: mode=startslave
   when:
     - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
   

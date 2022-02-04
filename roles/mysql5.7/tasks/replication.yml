@@ -45,7 +45,6 @@
     master_log_pos: "{{ master.Position }}"
   when:
     - mysql_replication_role == 'slave'
-    - mysql_replication_user.name is defined
     
 
 - name: Start replication.

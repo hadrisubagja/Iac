@@ -1,8 +1,22 @@
 ---
-- hosts: database
+- hosts: master
   remote_user: root
   become: yes
   gather_facts: no
   
   roles:
-   - mysql5.7
+   - {
+    role: mysql5.7, server_id: 1
+   }
+
+- hosts: slave
+  remote_user: root
+  become: yes
+  gather_facts: no
+  
+  roles:
+   - {
+    role: mysql5.7, server_id: 2,
+    mysql_replication_master: 34.101.100.223,
+    mysql_replication_role: slave
+   }

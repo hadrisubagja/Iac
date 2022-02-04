@@ -84,13 +84,14 @@ long_query_time      = 1
 # note: if you are setting up a replication slave, see README.Debian about
 #       other settings you may need to change.
 
-{% if mysql_replication_master %}
+
 server-id		= {{ server_id }}
+
 
 {% if mysql_replication_role == 'master' %}
 log_bin			= /var/log/mysql/mysql-bin.log
 expire_logs_days	= 14
-max_binlog_size         = 1G
+max_binlog_size         = 100M
 
 {% for db in mysql_databases %}
 {% if db.replicate|default(1) %}
@@ -102,12 +103,11 @@ max_binlog_size         = 1G
 {% endif %}
 
 {% if mysql_replication_role == 'slave' %}
-server-id		= 2
 read_only
 relay-log = relay-bin
 relay-log-index = relay-bin.index
 {% endif %}
-{% endif %}
+
 #
 # * InnoDB
 #

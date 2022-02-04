@@ -29,7 +29,7 @@
     delegate_to: "{{ mysql_replication_master }}"
   register: master
   when:
-    - mysql_replication_role == 'master'
+    - mysql_replication_role == 'slave'
     
   
 

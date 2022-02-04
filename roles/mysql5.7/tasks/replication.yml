@@ -19,7 +19,7 @@
     login_password: "{{ mysql_new_root_password }}"
   register: slave
   when:
-    - mysql_replication_role == 'slave'
+    - mysql_replication_role !== 'master'
   notify: Restart mysql
     
   
@@ -32,7 +32,7 @@
   delegate_to: 34.101.100.223
   register: master
   when:
-    - mysql_replication_role == 'slave'
+    - mysql_replication_role !== 'master'
     
   
 
@@ -47,7 +47,7 @@
     master_log_file: "{{ master.File }}"
     master_log_pos: "{{ master.Position }}"
   when:
-    - mysql_replication_role == 'slave'
+    - mysql_replication_role !== 'master'
     
 
 - name: Start replication.
@@ -56,6 +56,6 @@
     login_user: "{{ mysql_root_username }}"
     login_password: "{{ mysql_new_root_password }}"
   when:
-    - mysql_replication_role == 'slave'
+    - mysql_replication_role !== 'master'
     
   

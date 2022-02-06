@@ -80,6 +80,7 @@
     state: reloaded
     enabled: yes
     force: true
+  ignore_errors: true
 
 - name: Check mysql directory if exist
   stat:

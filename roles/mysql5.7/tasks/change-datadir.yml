@@ -128,12 +128,6 @@
     regexp: '^datadir'
     line: 'datadir = {{ dbdatadir }}'
 
-- name: Stop mysql Service
-  service:
-    name: mysql
-    state: started
-    enabled: yes
-
 - name: Check mysql directory if exist
   stat:
     path: /var/lib/mysql.bak

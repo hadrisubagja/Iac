@@ -61,7 +61,6 @@
   service:
     name: apparmor
     state: reloaded
-    enable: yes
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:

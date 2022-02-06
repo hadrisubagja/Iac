@@ -45,15 +45,15 @@
     backup: yes
 
 - name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/apparmor.d/usr.sbin.mysqld
+  replace:
+    dest: /etc/apparmor.d/usr.sbin.mysqld
     regexp: '^/var/lib/mysql/ r'
     replace: '{{ dbdatadir }}/ r,'
     backup: yes
 
 - name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/apparmor.d/usr.sbin.mysqld
+  replace:
+    dest: /etc/apparmor.d/usr.sbin.mysqld
     regexp: '^/var/lib/mysql/** rwk,'
     replace: '{{ dbdatadir }}/** rwk,'
 
@@ -61,6 +61,7 @@
   service:
     name: apparmor
     state: reloaded
+    enable: yes
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:
@@ -74,6 +75,16 @@
   notify: 
    - Start mysql
    - Restart mysql
+
+- name: Check mysql directory if exist
+  stat:
+    path: /var/lib/mysql.bak
+  check_mode: yes
+  register: check_directory
+
+- name: Rename /var/lib/mysql
+  command: mv /var/lib/mysql /var/lib/mysql.bak
+  when: not check_directory.stat.exists
 
 # - name: Ensure AppArmor service is started
 #   service:

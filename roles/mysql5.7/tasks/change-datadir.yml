@@ -47,15 +47,15 @@
 - name: Enable remote login to mysql
   replace:
     dest: /etc/apparmor.d/usr.sbin.mysqld
-    regexp: '^/var/lib/mysql/ r'
-    replace: '{{ dbdatadir }}/ r,'
+    regexp: '^/var/lib/mysql/'
+    replace: '{{ dbdatadir }}/'
     backup: yes
 
-- name: Enable remote login to mysql
-  replace:
-    dest: /etc/apparmor.d/usr.sbin.mysqld
-    regexp: '^/var/lib/mysql/** rwk,'
-    replace: '{{ dbdatadir }}/** rwk,'
+# - name: Enable remote login to mysql
+#   replace:
+#     dest: /etc/apparmor.d/usr.sbin.mysqld
+#     regexp: '^/var/lib/mysql/** rwk,'
+#     replace: '{{ dbdatadir }}/** rwk,'
 
 - name: Reload AppArmor all profiles
   service:

@@ -60,7 +60,7 @@
 - name: Reload AppArmor all profiles
   service:
     name: apparmor
-    state: reloaded
+    state: restarted
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:

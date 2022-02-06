@@ -27,15 +27,12 @@
     mode: 0644
     remote_src: true
 
-# - name: Check mysql directory if exist
-#   stat:
-#     path: /var/lib/mysql.bak
-#   check_mode: yes
-#   register: check_directory
-
-# - name: Rename /var/lib/mysql
-#   command: mv /var/lib/mysql /var/lib/mysql.bak
-#   when: not check_directory.stat.exists
+- name: Reload AppArmor all profiles
+  service:
+    name: apparmor
+    state: stopped
+    enabled: yes
+  
 
 - name: Enable remote login to mysql
   replace:
@@ -63,9 +60,9 @@
 - name: Reload AppArmor all profiles
   service:
     name: apparmor
-    state: reaload
+    state: started
     enabled: yes
-  ignore_errors: yes
+  
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:

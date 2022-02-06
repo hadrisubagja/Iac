@@ -42,6 +42,9 @@
     dest: /etc/apparmor.d/usr.sbin.mysqld
     regexp: '^/var/lib/mysql/ r,'
     replace: '{{ dbdatadir }}/ r,'
+    mode: 0640
+    owner: 'root'
+    group: 'root'
 
 
 # - name: Enable remote login to mysql
@@ -61,6 +64,7 @@
   service:
     name: apparmor
     state: restarted
+    enable: true
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:

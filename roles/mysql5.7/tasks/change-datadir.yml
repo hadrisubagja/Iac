@@ -109,11 +109,11 @@
 
 - name: Stop mysql Service
   service:
-    name: mysql
+    name: mysqld
     state: stopped
     enabled: yes
 
-- name: Ansible copy files from a directory to remote server
+- name: Copy datadir MySQL
   copy:
     src: /var/lib/mysql/
     dest: "{{ dbdatadir }}/"

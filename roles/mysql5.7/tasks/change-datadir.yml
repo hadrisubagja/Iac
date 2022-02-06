@@ -48,14 +48,14 @@
   lineinfile:
     path: /etc/apparmor.d/usr.sbin.mysqld
     regexp: '^/var/lib/mysql/ r'
-    line: '{{ dbdatadir }}/mysql/ r,'
+    line: '{{ dbdatadir }}/ r,'
     backup: yes
 
 - name: Enable remote login to mysql
   lineinfile:
     path: /etc/apparmor.d/usr.sbin.mysqld
     regexp: '^/var/lib/mysql/** rwk,'
-    line: '{{ dbdatadir }}/mysql/** rwk,'
+    line: '{{ dbdatadir }}/** rwk,'
 
 - name: Reload AppArmor all profiles
   service:

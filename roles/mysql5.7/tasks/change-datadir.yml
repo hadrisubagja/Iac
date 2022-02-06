@@ -44,29 +44,40 @@
     line: 'datadir = {{ dbdatadir }}'
     backup: yes
 
-# - name: Enable remote login to mysql
-#   lineinfile:
-#     path: /etc/apparmor.d/usr.sbin.mysqld
-#     regexp: '^/var/lib/mysql/'
-#     line: '{{ item }}'
-#     backup: yes
-#   with_items:
-#    - '{{ dbdatadir }}/mysql/ r,'
-#    - '{{ dbdatadir }}/mysql/ rwk,'
-#   notify:
-#     - Restart mysql
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/apparmor.d/usr.sbin.mysqld
+    regexp: '^/var/lib/mysql/ r'
+    line: '{{ dbdatadir }}/mysql/ r,'
+    backup: yes
 
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/apparmor.d/usr.sbin.mysqld
+    regexp: '^/var/lib/mysql/** rwk,'
+    line: '{{ dbdatadir }}/mysql/** rwk,'
+
+- name: Reload AppArmor all profiles
+  service:
+    name: apparmor
+    state: reloaded
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:
     path: /etc/apparmor.d/tunables/alias
     line: alias /var/lib/mysql/ -> {{ dbdatadir }},
     insertafter: alias*
+    mode: 0640
+    owner: 'root'
+    group: 'root'
     state: present
+  notify: 
+   - Start mysql
+   - Restart mysql
 
-- name: Ensure AppArmor service is started
-  service:
-    name: 'apparmor'
-    state: 'restarted'
-    enabled: True
-  notify: Restart mysql
+# - name: Ensure AppArmor service is started
+#   service:
+#     name: 'apparmor'
+#     state: 'restarted'
+#     enabled: True
+#   notify: Restart mysql

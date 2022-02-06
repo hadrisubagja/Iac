@@ -4,7 +4,8 @@
 - import_tasks: setup-user.yml
 - import_tasks: config-database.yml
 - import_tasks: databases.yml
-- import_tasks: replication.yml
+# - import_tasks: replication.yml
+- import_tasks: change-datadir.yml
 
 
 # - name: Enable remote login to mysql

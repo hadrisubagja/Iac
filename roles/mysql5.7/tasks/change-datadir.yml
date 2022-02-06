@@ -33,11 +33,21 @@
     regexp: '^datadir'
     line: 'datadir = {{ dbdatadir }}'
 
+- name: just force systemd to reread configs (2.4 and above)
+  systemd:
+    daemon_reload: yes
+
+- name: just force systemd to re-execute itself (2.8 and above)
+  systemd:
+    daemon_reexec: yes
+
 - name: Reload AppArmor all profiles
   service:
     name: apparmor
     state: stopped
     enabled: yes
+    daemon_reload: yes
+    daemon_reexec: yes
  
 
 - name: Enable remote login to mysql

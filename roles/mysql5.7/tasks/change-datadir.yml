@@ -38,24 +38,24 @@
 #   when: not check_directory.stat.exists
 
 - name: Enable remote login to mysql
-  lineinfile:
-    path: /etc/mysql/mysql.conf.d/mysqld.cnf
-    regexp: '^datadir'
-    line: 'datadir = {{ dbdatadir }}'
-    backup: yes
-
-- name: Enable remote login to mysql
   replace:
     dest: /etc/apparmor.d/usr.sbin.mysqld
-    regexp: '^/var/lib/mysql/'
-    replace: '{{ dbdatadir }}/'
-    backup: yes
+    regexp: '^/var/lib/mysql/ r,'
+    replace: '{{ dbdatadir }}/ r,'
+
 
 # - name: Enable remote login to mysql
 #   replace:
 #     dest: /etc/apparmor.d/usr.sbin.mysqld
 #     regexp: '^/var/lib/mysql/** rwk,'
 #     replace: '{{ dbdatadir }}/** rwk,'
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^datadir'
+    line: 'datadir = {{ dbdatadir }}'
+
 
 - name: Reload AppArmor all profiles
   service:

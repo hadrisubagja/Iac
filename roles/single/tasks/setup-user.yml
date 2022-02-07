@@ -1,0 +1,49 @@
+---
+
+- name: Copy my.cnf global MySQL configuration.
+  template:
+    src: my.cnf.j2
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    owner: root
+    group: root
+    mode: 0644
+    force: true
+  notify: Restart mysql
+
+- name: Restart mysql
+  service: name=mysql enabled=yes state=restarted
+
+
+#Setup User Root 
+- name: Setup mysql root pass
+  mysql_user:
+    user: "{{ mysql_root_username }}"
+    host_all: yes
+    password: "{{ mysql_new_root_password }}"
+    check_implicit_admin: yes
+    state: present
+  ignore_errors: yes
+
+
+#Create User Database    
+- name: creating mysql user
+  mysql_user:
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_new_root_password }}"
+    name: "{{ mysql_user_username }}"
+    password: "{{ mysql_user_password }}"
+    priv: '*.*:ALL,GRANT'
+    host: '%'
+    state: present
+  ignore_errors: yes
+
+
+
+- name: 3. remove anonymous users
+  mysql_user:
+      login_user: "{{ mysql_root_username }}"
+      login_password: "{{ mysql_new_root_password }}"
+      user: ''
+      host_all: yes
+      state: absent
+  ignore_errors: yes

@@ -1,8 +1,7 @@
 ---
 # tasks file for roles/mysql
 - import_tasks: installation.yml
-- import_tasks: setup-user.yml
-- import_tasks: config-database.yml
+- import_tasks: configuration.yml
 - import_tasks: databases.yml
 - import_tasks: replication.yml
 - import_tasks: change-datadir.yml

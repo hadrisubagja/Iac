@@ -37,7 +37,7 @@
     owner: mysql 
     group: mysql 
     recurse: yes
-  when: dbdatadir != '/var/lib/mysql'
+  #when: dbdatadir != '/var/lib/mysql'
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:
@@ -49,24 +49,24 @@
     group: root
     mode: 0644
 
-- name: Replace apparmor datadir location
-  replace:
-    dest: /etc/apparmor.d/usr.sbin.mysqld
-    regexp: '^/var/lib/mysql/'
-    replace: '{{ dbdatadir }}/'
-    owner: root
-    group: root
-    mode: 0644
+# - name: Replace apparmor datadir location
+#   replace:
+#     dest: /etc/apparmor.d/usr.sbin.mysqld
+#     regexp: '^/var/lib/mysql/'
+#     replace: '{{ dbdatadir }}/'
+#     owner: root
+#     group: root
+#     mode: 0644
 
-- name: Copy my.cnf global MySQL configuration.
-  template:
-    src: mysql.j2
-    dest: /etc/apparmor.d/abstractions/mysql
-    owner: root
-    group: root
-    mode: 0644
-    force: true
-  notify: Restart mysql
+# - name: Copy my.cnf global MySQL configuration.
+#   template:
+#     src: mysql.j2
+#     dest: /etc/apparmor.d/abstractions/mysql
+#     owner: root
+#     group: root
+#     mode: 0644
+#     force: true
+#   notify: Restart mysql
 
 # - name: Enable remote login to mysql
 #   replace:

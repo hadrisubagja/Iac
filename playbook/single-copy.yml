@@ -5,9 +5,9 @@
 
   tasks:
    - name: chmod
-     command: chown --reference=/var/lib/mysql 
-     args:
-       chdir: /mnt/mysql/data/
+     script: chown --reference=/var/lib/mysql /mnt/mysql/data/
+    #  args:
+    #    chdir: 
     #  with_items:
       
     #   - chmod --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/

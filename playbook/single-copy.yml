@@ -1,0 +1,12 @@
+---
+- hosts: master
+  become: yes
+  gather_facts: no
+
+  tasks:
+   - name: chmod
+     command: "{{ items }}"
+     with_items:
+      - chown --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
+      - chmod --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
+  

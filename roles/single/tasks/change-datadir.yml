@@ -12,7 +12,7 @@
     state: directory
     # owner: mysql
     # group: mysql
-    mode: 0755
+    # mode: 0755
   when: not check_directory.stat.exists
 
 - name: Stop mysql Service
@@ -25,9 +25,9 @@
   copy:
     src: /var/lib/mysql/
     dest: "{{ dbdatadir }}/"
-    # owner: mysql
-    # group: mysql
-    mode: 0640
+    # # owner: mysql
+    # # group: mysql
+    # mode: 0640
     remote_src: true
 
 - name: chmod

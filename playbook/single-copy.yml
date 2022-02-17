@@ -5,7 +5,7 @@
 
   tasks:
    - name: chmod
-     shell: chown -R mysql:mysql /mnt/mysql/data/
+     shell: chown 750 /mnt/mysql/data/
      args:
        executable: /bin/bash
     #  with_items:

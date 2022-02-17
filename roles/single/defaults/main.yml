@@ -24,5 +24,5 @@ mysql_replication_role: master
 
 # create directory
 dbservicename: myapk   # optional to the application name
-dbdatadir: "/home/hadrisubagja/mysql/data"
+dbdatadir: "/mnt/mysql/data"
 

@@ -30,6 +30,16 @@
     mode: 0640
     remote_src: true
 
+- name: chmod
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+   - chown -R mysql:mysql "{{ dbdatadir }}"
+   - chown 750 "{{ dbdatadir }}"
+   - chown --reference=/var/lib/mysql "{{ dbdatadir }}"
+   - chmod --reference=/var/lib/mysql "{{ dbdatadir }}"
+
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:

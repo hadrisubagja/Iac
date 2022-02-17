@@ -5,8 +5,8 @@
 
   tasks:
    - name: chmod
-     shell: "{{ items }}"
-     with_items:
-      - chown --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
-      - chmod --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
+     shell: chown --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
+    #  with_items:
+      
+    #   - chmod --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
   

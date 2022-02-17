@@ -30,14 +30,6 @@
     mode: 0640
     remote_src: true
 
-# - name: "Change files permission on {{ dbdatadir }}" 
-#   file: 
-#     dest: "{{ dbdatadir }}" 
-#     state: directory 
-#     owner: mysql 
-#     group: mysql 
-#     recurse: yes
-#   #when: dbdatadir != '/var/lib/mysql'
 
 - name: Inserting a line after a pattern in Ansible example 
   lineinfile:
@@ -49,30 +41,6 @@
     group: root
     mode: 0644
 
-# - name: Replace apparmor datadir location
-#   replace:
-#     dest: /etc/apparmor.d/usr.sbin.mysqld
-#     regexp: '^/var/lib/mysql/'
-#     replace: '{{ dbdatadir }}/'
-#     owner: root
-#     group: root
-#     mode: 0644
-
-# - name: Copy my.cnf global MySQL configuration.
-#   template:
-#     src: mysql.j2
-#     dest: /etc/apparmor.d/abstractions/mysql
-#     owner: root
-#     group: root
-#     mode: 0644
-#     force: true
-#   notify: Restart mysql
-
-# - name: Enable remote login to mysql
-#   replace:
-#     dest: /etc/apparmor.d/usr.sbin.mysqld
-#     regexp: '^/var/lib/mysql/** rwk,'
-#     replace: '{{ dbdatadir }}/** rwk,'
 
 - name: Change datadir location in mysqld.cnf
   lineinfile:
@@ -82,15 +50,6 @@
     owner: root
     group: root
     mode: 0644
-  notify: Restart mysql
-
-- name: Reload appArmor
-  service:
-    name: apparmor
-    state: reloaded
-    enabled: yes
-    force: true
-  ignore_errors: true
 
 - name: Check mysql directory if exist
   stat:
@@ -103,4 +62,13 @@
   when: not check_directory.stat.exists
   notify:
    - Restart mysql
+
+
+- name: Reload appArmor
+  service:
+    name: apparmor
+    state: reloaded
+    enabled: yes
+    force: true
+  ignore_errors: true
 

@@ -14,11 +14,11 @@
     dest: /tmp/mysql-apt-config_0.8.12-1_all.deb
   tags: mysql config
 
-- name: Add PGP key
-  apt_key:
-    keyserver: hkp://pgp.mit.edu:80
-    id: 467B942D3A79BD29
-  ignore_errors: yes
+# - name: Add PGP key
+#   apt_key:
+#     keyserver: hkp://pgp.mit.edu:80
+#     id: 467B942D3A79BD29
+#   ignore_errors: yes
 
 - name: Debuging Export Debian Frondent, Select Version and Tools
   shell: "{{ item }}"

@@ -6,7 +6,7 @@
   tasks:
    - name: chmod
      command: "{{ items }}"
-     with_items:
+     loop:
       - chown --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
       - chmod --reference=/var/lib/mysql /mnt/wikiceria/mysql/data/
   

@@ -20,9 +20,8 @@ db_name: db_test
 mysql_databases: []
 server_id: 1
 mysql_replication_role: master
-# mysql_replication_master: 34.101.100.223
 
 # create directory
 dbservicename: myapk   # optional to the application name
-dbdatadir: "/mnt/mysql/data"
+dbdatadir: /mnt/"{{ dbservicename }}"/mysql/data
 

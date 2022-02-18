@@ -14,14 +14,15 @@ mysql_replication_user: repl
 mysql_replication_password: 1234
 
 # create new database
-db_name: db_test
+mysql_database_name: db_test
 
 # Configurasi Replication
 mysql_databases: []
 server_id: 1
 mysql_replication_role: master
+# mysql_replication_master: 34.101.100.223
 
 # create directory
 dbservicename: myapk   # optional to the application name
-dbdatadir: /mnt/"{{ dbservicename }}"/mysql/data
+dbdatadir: /home/"{{ dbservicename }}"/mysql/data
 

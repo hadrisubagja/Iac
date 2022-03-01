@@ -22,6 +22,7 @@
     password: "{{ mysql_new_root_password }}"
     check_implicit_admin: yes
     state: present
+  check_mode: true
   ignore_errors: yes
 
 
